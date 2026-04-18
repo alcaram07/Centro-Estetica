@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /Admin/
+Disallow: /Identity/
+
+Sitemap: https://patic-estetica.onrender.com/sitemap.xml
