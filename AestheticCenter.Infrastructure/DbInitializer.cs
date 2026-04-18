@@ -10,8 +10,8 @@ public static class DbInitializer
 {
     public static async Task Initialize(ApplicationDbContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
-        // En lugar de EnsureCreated, usamos Migrate para que se creen las tablas vía migraciones
-        await context.Database.MigrateAsync();
+        // EnsureCreated es más robusto cuando mezclamos SQLite y Postgres al inicio
+        await context.Database.EnsureCreatedAsync();
 
         // 1. Crear Roles si no existen
         string[] roleNames = { "Admin", "Customer" };

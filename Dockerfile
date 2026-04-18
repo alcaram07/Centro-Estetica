@@ -24,6 +24,7 @@ COPY --from=publish /app/publish .
 
 # Set environment variables
 ENV ASPNETCORE_URLS=http://+:8080
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "AestheticCenter.Web.dll"]
