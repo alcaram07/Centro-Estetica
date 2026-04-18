@@ -130,6 +130,10 @@ body {
 .wa-float:hover { transform: scale(1.08); color: #fff; }
 
 /* ── CARDS ───────────────────────────────── */
+.logo-blend {
+  mix-blend-mode: multiply;
+}
+
 .card-aesthetic {
   background: var(--white);
   border: 0.5px solid var(--border);
