@@ -18,7 +18,7 @@ FROM build AS publish
 RUN dotnet publish "AestheticCenter.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Stage 3: Final
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
