@@ -47,6 +47,7 @@ public class RegisterModel : PageModel
 
     public void OnGet(string? returnUrl = null)
     {
+        Input = new InputModel();
         ReturnUrl = returnUrl;
     }
 
