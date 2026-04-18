@@ -20,7 +20,7 @@ RUN dotnet publish "AestheticCenter.Web.csproj" -c Release -o /app/publish /p:Us
 # Stage 3: Final
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
-COPY --from:publish /app/publish .
+COPY --from=publish /app/publish .
 
 # Set environment variables
 ENV ASPNETCORE_URLS=http://+:8080
