@@ -76,4 +76,6 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
+app.MapGet("/health", () => Results.Ok("Keep Alive"));
+
 app.Run();
