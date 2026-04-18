@@ -1,0 +1,31 @@
+@page "{id:int}"
+@model AestheticCenter.Web.Pages.Admin.Services.DeleteModel
+@{
+    ViewData["Title"] = "Eliminar Servicio";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-danger text-white py-3">
+                <h2 class="mb-0 fs-4">Eliminar Servicio</h2>
+            </div>
+            <div class="card-body p-4">
+                <i class="bi bi-exclamation-triangle-fill text-danger display-1 mb-4"></i>
+                <h3 class="mb-3">¿Estás seguro?</h3>
+                <p class="text-muted mb-4">
+                    Estás a punto de eliminar el servicio: <br />
+                    <strong>@Model.Service.Name</strong>
+                </p>
+                
+                <form method="post">
+                    <input type="hidden" asp-for="Service.Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg">Eliminar Permanentemente</button>
+                        <a asp-page="./Index" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -31,6 +31,9 @@
                         <label asp-for="AppointmentTime" class="form-label">Fecha y Hora</label>
                         <input asp-for="AppointmentTime" class="form-control" type="datetime-local" />
                         <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+                        <div class="form-text mt-2">
+                            <i class="bi bi-info-circle"></i> Horario de atención: <strong>Lunes a Viernes de 09:00 a 20:00</strong>.
+                        </div>
                     </div>
 
                     <div class="mb-3">

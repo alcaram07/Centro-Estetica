@@ -36,10 +36,10 @@
                         <td>@service.DurationMinutes min</td>
                         <td>
                             <div class="btn-group btn-group-sm">
-                                <a href="#" class="btn btn-outline-secondary disabled" title="Editar (Próximamente)">
+                                <a asp-page="./Edit" asp-route-id="@service.Id" class="btn btn-outline-secondary" title="Editar">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <a href="#" class="btn btn-outline-danger disabled" title="Eliminar (Próximamente)">
+                                <a asp-page="./Delete" asp-route-id="@service.Id" class="btn btn-outline-danger" title="Eliminar">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </div>

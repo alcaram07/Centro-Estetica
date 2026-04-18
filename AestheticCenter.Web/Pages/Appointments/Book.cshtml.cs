@@ -63,10 +63,23 @@ public class BookModel : PageModel
             return Page();
         }
 
+        // Validaciones de horario comercial
+        if (AppointmentTime.DayOfWeek == DayOfWeek.Saturday || AppointmentTime.DayOfWeek == DayOfWeek.Sunday)
+        {
+            ModelState.AddModelError(string.Empty, "Lo sentimos, el centro está cerrado los fines de semana. Por favor, elige un día de lunes a viernes.");
+            return Page();
+        }
+
+        if (AppointmentTime.Hour < 9 || AppointmentTime.Hour >= 20)
+        {
+            ModelState.AddModelError(string.Empty, "Nuestro horario de atención es de 09:00 a 20:00. Por favor, elige una hora dentro de este rango.");
+            return Page();
+        }
+
         var isAvailable = await _appointmentRepository.IsSlotAvailableAsync(AppointmentTime, ServiceId);
         if (!isAvailable)
         {
-            ModelState.AddModelError(string.Empty, "Lo sentimos, este horario ya está reservado. Por favor, elige otro.");
+            ModelState.AddModelError(string.Empty, "Lo sentimos, este horario ya está reservado por otra persona. Por favor, elige otro.");
             return Page();
         }
 

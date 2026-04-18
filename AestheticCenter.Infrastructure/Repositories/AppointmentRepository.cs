@@ -48,8 +48,20 @@ public class AppointmentRepository
 
     public async Task<bool> IsSlotAvailableAsync(DateTime time, int serviceId)
     {
-        // Lógica simple: no permitir dos citas exactamente a la misma hora
-        // En una app real, aquí validaríamos la duración del servicio
+        // 1. Validar que no sea fin de semana
+        if (time.DayOfWeek == DayOfWeek.Saturday || time.DayOfWeek == DayOfWeek.Sunday)
+        {
+            return false;
+        }
+
+        // 2. Validar horario (09:00 a 20:00)
+        var hour = time.Hour;
+        if (hour < 9 || hour >= 20)
+        {
+            return false;
+        }
+
+        // 3. Lógica de conflicto: no permitir dos citas exactamente a la misma hora
         return !await _context.Appointments
             .AnyAsync(a => a.AppointmentTime == time && a.Status != AppointmentStatus.Cancelled);
     }
