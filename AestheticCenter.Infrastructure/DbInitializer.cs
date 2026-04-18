@@ -2,13 +2,16 @@ using AestheticCenter.Core.Entities;
 using AestheticCenter.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace AestheticCenter.Infrastructure;
 
 public static class DbInitializer
 {
     public static async Task Initialize(ApplicationDbContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
-        context.Database.EnsureCreated();
+        // En lugar de EnsureCreated, usamos Migrate para que se creen las tablas vía migraciones
+        await context.Database.MigrateAsync();
 
         // 1. Crear Roles si no existen
         string[] roleNames = { "Admin", "Customer" };
