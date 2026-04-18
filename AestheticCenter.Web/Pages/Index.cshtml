@@ -1,0 +1,245 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Pati C – Estética & Cosmetología";
+}
+
+<style>
+    .hero {
+      text-align: center;
+      padding: 88px 48px 72px;
+      background: linear-gradient(160deg, var(--nude) 0%, var(--rosa-light) 55%, var(--nude-mid) 100%);
+      position: relative; overflow: hidden;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(252,233,240,0.8);
+      color: #a83060;
+      font-size: 12px; border-radius: 20px;
+      padding: 6px 18px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 24px;
+      border: 0.5px solid rgba(194,82,122,.2);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 400;
+      color: var(--ciruela);
+      line-height: 1.15;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .hero h1 em { font-style: italic; color: var(--rosa); }
+
+    .hero p {
+      font-size: 18px; color: var(--text-mid);
+      max-width: 520px; margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .hero-pills {
+      display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+      margin-top: 40px;
+    }
+    .hero-pill {
+      background: rgba(255,255,255,0.7);
+      border: 0.5px solid var(--border);
+      border-radius: 20px; padding: 6px 18px;
+      font-size: 13px; color: var(--text-mid);
+    }
+
+    .stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      background: var(--white);
+      border-top: 0.5px solid var(--border);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .stat-item {
+      text-align: center; padding: 36px 24px;
+      border-right: 0.5px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px; font-weight: 400;
+      color: var(--rosa); display: block;
+    }
+    .stat-label { font-size: 13px; color: var(--text-soft); margin-top: 4px; }
+
+    .feat-card {
+      background: var(--white); border: 0.5px solid var(--border);
+      border-radius: 20px; padding: 32px 28px; text-align: center;
+      height: 100%;
+    }
+    .feat-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .icon-pink   { background: var(--rosa-light); }
+    .icon-peach  { background: var(--nude-mid); }
+    .icon-lilac  { background: #eeddef; }
+
+    .about {
+      background: var(--white);
+      border-radius: 24px;
+    }
+    .about-photo {
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, var(--rosa-light) 0%, var(--nude-mid) 100%);
+      border-radius: 24px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-soft);
+    }
+
+    .testi-card {
+      background: var(--white); border-radius: 18px;
+      padding: 24px; border: 0.5px solid var(--border);
+      height: 100%;
+    }
+    .testi-stars { color: #f5a623; font-size: 15px; margin-bottom: 12px; }
+
+    .cta-final {
+      background: var(--ciruela); color: #fff;
+      border-radius: 30px;
+      padding: 80px 48px;
+    }
+</style>
+
+<!-- HERO -->
+<section class="hero">
+    <span class="hero-badge">Patricia · Esteticista & Cosmetóloga · Montevideo</span>
+    <h1>Tu piel merece<br><em>lo mejor</em></h1>
+    <p>Tratamientos faciales, masajes y cosmetología personalizada. Porque cada piel tiene su historia.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a asp-page="/Services/Index" class="btn btn-primary btn-lg">Ver servicios</a>
+        <a href="https://wa.me/598096045127" target="_blank" class="btn btn-outline-secondary btn-lg" style="display:inline-flex;align-items:center;gap:8px;">
+            <i class="bi bi-whatsapp"></i> Hablar por WhatsApp
+        </a>
+    </div>
+    <div class="hero-pills">
+        <span class="hero-pill">✦ Masajes estéticos</span>
+        <span class="hero-pill">✦ Tratamientos faciales</span>
+        <span class="hero-pill">✦ Atención personalizada</span>
+        <span class="hero-pill">✦ Turnos online</span>
+    </div>
+</section>
+
+<!-- STATS -->
+<div class="stats mb-5">
+    <div class="stat-item">
+        <span class="stat-num">+500</span>
+        <span class="stat-label">Clientas atendidas</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-num">5+</span>
+        <span class="stat-label">Años de experiencia</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-num">398</span>
+        <span class="stat-label">Publicaciones en IG</span>
+    </div>
+</div>
+
+<!-- FEATURES -->
+<div class="container py-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feat-card shadow-sm">
+                <div class="feat-icon icon-pink">✨</div>
+                <h3 class="section-title fs-4">Tratamientos premium</h3>
+                <p class="text-muted">Productos de alta gama y técnicas de última generación para resultados visibles.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feat-card shadow-sm">
+                <div class="feat-icon icon-peach">📅</div>
+                <h3 class="section-title fs-4">Turnos fáciles</h3>
+                <p class="text-muted">Reservá tu turno online en segundos, desde donde estés y cuando quieras.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feat-card shadow-sm">
+                <div class="feat-icon icon-lilac">🌸</div>
+                <h3 class="section-title fs-4">Atención única</h3>
+                <p class="text-muted">Cada clienta es especial. Patricia personaliza cada tratamiento para ti.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SOBRE MÍ -->
+<div class="container py-5">
+    <div class="about p-4 p-lg-5 shadow-sm">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5">
+                <div class="about-photo">
+                    <div class="text-center p-4">
+                        <i class="bi bi-camera fs-1 opacity-25"></i>
+                        <p class="mt-2 small opacity-50">Foto de Patricia</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <span class="section-label">Sobre mí</span>
+                <h2 class="section-title mb-4">Hola, soy Patricia</h2>
+                <p class="lead text-muted mb-4">Soy esteticista y cosmetóloga, con años de experiencia cuidando la piel de mis clientas en Montevideo.</p>
+                <p class="text-muted mb-4">Me apasiona lo que hago porque creo que el bienestar exterior es un reflejo del interior. Cada tratamiento está pensado de manera personalizada.</p>
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <span class="badge bg-rosa-light text-rosa rounded-pill px-3 py-2">Esteticista certificada</span>
+                    <span class="badge bg-rosa-light text-rosa rounded-pill px-3 py-2">Cosmetóloga</span>
+                    <span class="badge bg-rosa-light text-rosa rounded-pill px-3 py-2">Montevideo, UY</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TESTIMONIOS -->
+<section class="bg-rosa-light py-5 mt-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <span class="section-label">Lo que dicen</span>
+            <h2 class="section-title">Testimonios de clientas</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testi-card shadow-sm">
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="fst-italic text-muted">"La limpieza facial me dejó la piel increíble. Patricia es una profesional de verdad."</p>
+                    <div class="fw-bold mt-3">— Valentina R.</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testi-card shadow-sm">
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="fst-italic text-muted">"El masaje fue lo mejor que pude haberme regalado. Me sentí otra persona. ¡Vuelvo seguro!"</p>
+                    <div class="fw-bold mt-3">— Sofía M.</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testi-card shadow-sm">
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="fst-italic text-muted">"Atención súper personalizada. Se nota que le importa cada clienta y eso no tiene precio."</p>
+                    <div class="fw-bold mt-3">— Carolina T.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="container py-5">
+    <section class="cta-final text-center shadow">
+        <h2 class="section-title text-white mb-3">¿Lista para tu próximo turno?</h2>
+        <p class="lead mb-5 opacity-75 text-white">Reservá online o escribime directo por WhatsApp. ¡Te espero!</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a asp-page="/Services/Index" class="btn btn-light btn-lg rounded-pill px-5 text-ciruela fw-bold">Reservar ahora</a>
+            <a href="https://wa.me/598096045127" target="_blank" class="btn btn-outline-light btn-lg rounded-pill px-5">WhatsApp</a>
+        </div>
+    </section>
+</div>

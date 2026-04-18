@@ -1,0 +1,61 @@
+@page
+@model AestheticCenter.Web.Pages.Appointments.MyAppointmentsModel
+@{
+    ViewData["Title"] = "Mis Citas";
+}
+
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <h1>Mis Citas</h1>
+    <a asp-page="/Services/Index" class="btn btn-primary">Nueva Reserva</a>
+</div>
+
+@if (!Model.Appointments.Any())
+{
+    <div class="alert alert-light text-center py-5 border">
+        <h4>Aún no tienes citas reservadas</h4>
+        <p class="text-muted">¡Anímate a probar uno de nuestros tratamientos!</p>
+        <a asp-page="/Services/Index" class="btn btn-outline-primary mt-2">Ver Servicios</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Servicio</th>
+                    <th>Fecha y Hora</th>
+                    <th>Estado</th>
+                    <th>Notas</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appointment in Model.Appointments)
+                {
+                    <tr>
+                        <td><strong>@appointment.Service?.Name</strong></td>
+                        <td>@appointment.AppointmentTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @switch (appointment.Status)
+                            {
+                                case AestheticCenter.Core.Entities.AppointmentStatus.Pending:
+                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                    break;
+                                case AestheticCenter.Core.Entities.AppointmentStatus.Confirmed:
+                                    <span class="badge bg-success">Confirmada</span>
+                                    break;
+                                case AestheticCenter.Core.Entities.AppointmentStatus.Cancelled:
+                                    <span class="badge bg-danger">Cancelada</span>
+                                    break;
+                                case AestheticCenter.Core.Entities.AppointmentStatus.Completed:
+                                    <span class="badge bg-info text-dark">Completada</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="text-muted small">@appointment.Notes</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,106 @@
+@page
+@model AestheticCenter.Web.Pages.Services.IndexModel
+@{
+    ViewData["Title"] = "Nuestros Servicios";
+}
+
+<style>
+    .service-card {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: 20px; padding: 28px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      transition: border-color .2s, transform .2s;
+      height: 100%;
+    }
+    .service-card:hover {
+      border-color: var(--rosa);
+      transform: translateY(-3px);
+    }
+    .service-card.featured {
+      border-color: var(--rosa);
+      background: linear-gradient(135deg, #fff 50%, var(--rosa-light));
+      box-shadow: 0 4px 15px rgba(194, 82, 122, 0.1);
+    }
+
+    .service-info { flex: 1; }
+    .service-tag {
+      font-size: 10px; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--rosa);
+      margin-bottom: 10px; display: block;
+    }
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; color: var(--ciruela);
+      margin-bottom: 12px;
+    }
+    .service-card p { font-size: 14px; color: var(--text-soft); line-height: 1.55; }
+
+    .service-meta {
+      text-align: right; flex-shrink: 0;
+      margin-left: 20px; padding-top: 4px;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+    }
+    .service-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; color: var(--rosa); line-height: 1;
+    }
+    .service-price sup { font-size: 16px; vertical-align: super; }
+    .service-dur { font-size: 12px; color: #b09090; }
+    
+    .service-btn {
+      background: var(--rosa); color: #fff;
+      border: none; border-radius: 18px;
+      padding: 8px 20px; font-size: 13px;
+      transition: background .2s;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .service-btn:hover { background: var(--rosa-dark); color: #fff; }
+</style>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <span class="section-label">Lo que ofrezco</span>
+        <h2 class="section-title">Nuestros servicios</h2>
+        <p class="section-sub">Descubrí los tratamientos pensados para tu bienestar</p>
+    </div>
+
+    <div class="row g-4">
+        @if (!Model.Services.Any())
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Aún no hay servicios disponibles. Vuelve pronto.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var service in Model.Services)
+            {
+                // Marcamos como "destacado" el primer servicio o uno específico
+                var isFeatured = service.Name.Contains("Facial");
+                
+                <div class="col-lg-6">
+                    <div class="service-card @(isFeatured ? "featured" : "") shadow-sm">
+                        <div class="service-info">
+                            @if (isFeatured) {
+                                <span class="service-tag">⭐ Más solicitado</span>
+                            } else {
+                                <span class="service-tag">Tratamiento</span>
+                            }
+                            <h3>@service.Name</h3>
+                            <p>@service.Description</p>
+                        </div>
+                        <div class="service-meta">
+                            <div class="service-price">
+                                <sup>$</sup>@service.Price.ToString("F0")
+                            </div>
+                            <div class="service-dur">@service.DurationMinutes min</div>
+                            <a asp-page="/Appointments/Book" asp-route-serviceId="@service.Id" class="service-btn">Reservar</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

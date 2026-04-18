@@ -1,0 +1,54 @@
+@page
+@model AestheticCenter.Web.Pages.Appointments.BookModel
+@{
+    ViewData["Title"] = "Reservar Cita";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h2 class="mb-0">Reservar Cita</h2>
+            </div>
+            <div class="card-body p-4">
+                @if (Model.SelectedService != null)
+                {
+                    <div class="alert alert-info mb-4">
+                        <h4 class="alert-heading">@Model.SelectedService.Name</h4>
+                        <p class="mb-0">
+                            <strong>Duración:</strong> @Model.SelectedService.DurationMinutes minutos <br />
+                            <strong>Precio:</strong> @Model.SelectedService.Price.ToString("C")
+                        </p>
+                    </div>
+                }
+
+                <form method="post">
+                    <input type="hidden" asp-for="ServiceId" />
+                    
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="AppointmentTime" class="form-label">Fecha y Hora</label>
+                        <input asp-for="AppointmentTime" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Notes" class="form-label">Notas adicionales (opcional)</label>
+                        <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Ej: Alguna alergia, preferencia..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Confirmar Reserva</button>
+                        <a asp-page="/Services/Index" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

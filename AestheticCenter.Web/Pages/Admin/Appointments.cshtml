@@ -1,0 +1,79 @@
+@page
+@model AestheticCenter.Web.Pages.Admin.AppointmentsModel
+@{
+    ViewData["Title"] = "Gestión de Citas";
+}
+
+<div class="mb-4">
+    <h1>Panel de Administración: Citas</h1>
+    <p class="text-muted">Gestiona las reservas de tus clientes.</p>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Cliente</th>
+                    <th>Servicio</th>
+                    <th>Fecha y Hora</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appointment in Model.Appointments)
+                {
+                    <tr>
+                        <td>
+                            <div class="fw-bold">@appointment.CustomerId</div>
+                            <small class="text-muted">@appointment.Notes</small>
+                        </td>
+                        <td>@appointment.Service?.Name</td>
+                        <td>@appointment.AppointmentTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @switch (appointment.Status)
+                            {
+                                case AestheticCenter.Core.Entities.AppointmentStatus.Pending:
+                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                    break;
+                                case AestheticCenter.Core.Entities.AppointmentStatus.Confirmed:
+                                    <span class="badge bg-success">Confirmada</span>
+                                    break;
+                                case AestheticCenter.Core.Entities.AppointmentStatus.Cancelled:
+                                    <span class="badge bg-danger">Cancelada</span>
+                                    break;
+                                case AestheticCenter.Core.Entities.AppointmentStatus.Completed:
+                                    <span class="badge bg-info text-dark">Completada</span>
+                                    break;
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@appointment.Id" asp-route-status="Confirmed">
+                                    <button type="submit" class="btn btn-outline-success" title="Confirmar">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                </form>
+                                <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@appointment.Id" asp-route-status="Completed">
+                                    <button type="submit" class="btn btn-outline-info" title="Completar">
+                                        <i class="bi bi-flag-fill"></i>
+                                    </button>
+                                </form>
+                                <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@appointment.Id" asp-route-status="Cancelled">
+                                    <button type="submit" class="btn btn-outline-danger" title="Cancelar">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+}
