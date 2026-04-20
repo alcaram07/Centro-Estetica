@@ -18,6 +18,22 @@ public class ApplicationDbContext : IdentityDbContext
     {
         base.OnModelCreating(builder);
 
+        // Configuración para que PostgreSQL acepte las fechas correctamente
+        var dateTimeConverter = new Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter<DateTime, DateTime>(
+            v => v.Kind == DateTimeKind.Utc ? v : DateTime.SpecifyKind(v, DateTimeKind.Utc),
+            v => v.Kind == DateTimeKind.Utc ? v : DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
+                {
+                    property.SetValueConverter(dateTimeConverter);
+                }
+            }
+        }
+
         // Configuración adicional si es necesaria
         builder.Entity<Service>()
             .Property(s => s.Price)
