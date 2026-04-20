@@ -62,6 +62,10 @@ public class RegisterModel : PageModel
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
+                
+                // Asignar rol de Cliente automáticamente
+                await _userManager.AddToRoleAsync(user, "Customer");
+
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return LocalRedirect(returnUrl);
             }
