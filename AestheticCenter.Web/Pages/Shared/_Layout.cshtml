@@ -19,7 +19,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-nude border-bottom sticky-top py-3">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-page="/Index">
-                    <img src="~/images/logo-patic.png" alt="Logo Pati C" width="48" height="48" class="rounded-circle shadow-sm logo-blend" asp-append-version="true" />
+                    <img src="~/images/logo-patic.jpg" alt="Logo Pati C" width="48" height="48" class="rounded-circle shadow-sm logo-blend" asp-append-version="true" />
                     <div>
                         <div class="nav-brand">Pati C</div>
                         <div class="nav-sub">Estética · Cosmetología</div>
@@ -35,6 +35,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Services/Index">Servicios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Gallery/Index">Galería</a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
