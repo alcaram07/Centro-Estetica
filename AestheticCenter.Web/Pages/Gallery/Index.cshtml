@@ -49,6 +49,7 @@
     </div>
 
     <div class="row g-4">
+        <!-- Imagen Real -->
         <div class="col-md-4">
             <div class="gallery-item shadow-sm">
                 <img src="~/images/gallery/work-1.jpg" class="gallery-img" alt="Tratamiento de Limpieza" asp-append-version="true" />
@@ -58,6 +59,26 @@
                 </div>
             </div>
         </div>
-        <!-- Aquí puedes ir añadiendo más fotos reales siguiendo esta estructura -->
+
+        <!-- Espacio para Vídeo Local -->
+        <div class="col-md-4">
+            <div class="gallery-item shadow-sm position-relative">
+                <video class="gallery-img" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()">
+                    <source src="~/videos/video-1.mp4" type="video/mp4">
+                    Tu navegador no soporta vídeos.
+                </video>
+                <div class="gallery-overlay" style="opacity: 1; background: rgba(0,0,0,0.2);">
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <i class="bi bi-play-circle-fill fs-1 text-white opacity-75"></i>
+                    </div>
+                    <div class="position-absolute bottom-0 start-0 p-3 text-white">
+                        <h5 class="mb-0">Tratamiento en Acción</h5>
+                        <small>Pasa el ratón para reproducir</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aquí puedes añadir más -->
     </div>
 </div>
