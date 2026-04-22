@@ -49,17 +49,15 @@
     </div>
 
     <div class="row g-4">
-        @for (int i = 1; i <= 6; i++)
-        {
-            <div class="col-md-4">
-                <div class="gallery-item shadow-sm">
-                    <img src="https://picsum.photos/seed/@(i + 10)/600/800" class="gallery-img" alt="Trabajo @i" />
-                    <div class="gallery-overlay">
-                        <h5 class="mb-0">Tratamiento Estético</h5>
-                        <small>Pati C Estética</small>
-                    </div>
+        <div class="col-md-4">
+            <div class="gallery-item shadow-sm">
+                <img src="~/images/gallery/work-1.jpg" class="gallery-img" alt="Tratamiento de Limpieza" asp-append-version="true" />
+                <div class="gallery-overlay">
+                    <h5 class="mb-0">Limpieza Facial</h5>
+                    <small>Resultados inmediatos</small>
                 </div>
             </div>
-        }
+        </div>
+        <!-- Aquí puedes ir añadiendo más fotos reales siguiendo esta estructura -->
     </div>
 </div>
