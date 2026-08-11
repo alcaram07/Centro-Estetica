@@ -1,7 +1,7 @@
 ﻿@{
     // Dominio público del sitio. Si se migra a un dominio propio, actualizar también
     // wwwroot/robots.txt y wwwroot/sitemap.xml, que lo llevan escrito.
-    const string siteUrl = "https://centro-estetica.onrender.com";
+    var siteUrl = SiteInfo.Url;
 
     var canonicalUrl = siteUrl + Context.Request.Path.Value?.TrimEnd('/');
     if (canonicalUrl == siteUrl) { canonicalUrl = siteUrl + "/"; }
@@ -38,8 +38,8 @@
     <meta name="twitter:image" content="@(siteUrl)/images/logo-patic.jpg" />
 
     @* Datos estructurados de negocio local: es lo que permite a Google mostrar el
-       negocio en resultados locales y en Maps. Falta completar streetAddress y los
-       horarios reales de atención. *@
+       negocio en resultados locales y en Maps. Los datos salen de SiteInfo.
+       Falta agregar openingHoursSpecification cuando se confirmen los horarios. *@
     @* El prefijo "!" desactiva los tag helpers en este elemento: de lo contrario
        ScriptTagHelper reescribe el atributo y el "+" sale codificado como &#x2B;. *@
     <!script type="application/ld+json">
@@ -47,20 +47,61 @@
       "@@context": "https://schema.org",
       "@@type": "BeautySalon",
       "name": "Pati C Estética & Cosmetología",
+      "alternateName": "Pati C Estética",
       "description": "@metaDescription",
       "url": "@siteUrl",
       "image": "@(siteUrl)/images/logo-patic.jpg",
-      "telephone": "+59896045127",
+      "telephone": "@SiteInfo.Telefono",
       "priceRange": "$$",
+      "currenciesAccepted": "UYU",
       "address": {
         "@@type": "PostalAddress",
-        "addressLocality": "Montevideo",
-        "addressRegion": "Montevideo",
+@if (SiteInfo.TieneDireccion)
+{
+        @:"streetAddress": "@SiteInfo.Direccion",
+}
+        "addressLocality": "@SiteInfo.Ciudad",
+        "addressRegion": "@SiteInfo.Ciudad",
+        "postalCode": "@SiteInfo.CodigoPostal",
         "addressCountry": "UY"
       },
-      "areaServed": {
-        "@@type": "City",
-        "name": "Montevideo"
+      "areaServed": [
+        { "@@type": "City", "name": "@SiteInfo.Ciudad" },
+        { "@@type": "Place", "name": "@SiteInfo.Barrio, @SiteInfo.Ciudad" }
+      ],
+      "knowsAbout": [
+        "Estética",
+        "Cosmetología",
+        "Tratamientos faciales",
+        "Masajes estéticos",
+        "Cuidado de la piel"
+      ],
+      "hasOfferCatalog": {
+        "@@type": "OfferCatalog",
+        "name": "Servicios de estética y cosmetología",
+        "itemListElement": [
+          {
+            "@@type": "Offer",
+            "itemOffered": { "@@type": "Service", "name": "Limpieza facial profunda" }
+          },
+          {
+            "@@type": "Offer",
+            "itemOffered": { "@@type": "Service", "name": "Tratamientos faciales" }
+          },
+          {
+            "@@type": "Offer",
+            "itemOffered": { "@@type": "Service", "name": "Masajes estéticos" }
+          },
+          {
+            "@@type": "Offer",
+            "itemOffered": { "@@type": "Service", "name": "Cosmetología personalizada" }
+          }
+        ]
+      },
+      "founder": {
+        "@@type": "Person",
+        "name": "Patricia",
+        "jobTitle": "Esteticista y Cosmetóloga"
       },
       "sameAs": [
         "https://instagram.com/pati.c.estetica"

@@ -1,7 +1,7 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "Pati C – Estética & Cosmetología";
+    ViewData["Title"] = "Estética y Cosmetología en Montevideo";
     ViewData["Description"] = "Esteticista y cosmetóloga en Montevideo. Tratamientos faciales, masajes estéticos y cuidado de la piel personalizado. Reservá tu turno online o por WhatsApp.";
 }
 
@@ -26,7 +26,9 @@
 
     .hero h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(40px, 6vw, 64px);
+      /* El titular es mas largo que el anterior: el minimo baja a 34px para que
+         "Cosmetologia" no desborde en pantallas angostas. */
+      font-size: clamp(34px, 5.5vw, 60px);
       font-weight: 400;
       color: var(--ciruela);
       line-height: 1.15;
@@ -39,6 +41,11 @@
       font-size: 18px; color: var(--text-mid);
       max-width: 520px; margin: 0 auto 40px;
       line-height: 1.7;
+    }
+    .hero .hero-lead {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-style: italic;
+      color: var(--rosa); margin-bottom: 12px;
     }
 
     .hero-pills {
@@ -104,6 +111,31 @@
     }
     .testi-stars { color: #f5a623; font-size: 15px; margin-bottom: 12px; }
 
+    .loc-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0; color: var(--text-mid);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .loc-list li:last-child { border-bottom: none; }
+    .loc-list i { color: var(--rosa); font-size: 18px; line-height: 1.5; }
+    .loc-list a { color: var(--text-mid); text-decoration: none; }
+    .loc-list a:hover { color: var(--rosa); }
+    .loc-map-link {
+      display: inline-block; margin-left: 8px;
+      font-size: 13px; color: var(--rosa) !important;
+      border-bottom: 0.5px solid var(--rosa);
+    }
+
+    .loc-card {
+      background: var(--rosa-light);
+      border-radius: 20px; padding: 28px;
+    }
+    .loc-services li {
+      padding: 8px 0; color: var(--text-mid);
+      border-bottom: 0.5px solid rgba(194,82,122,.15);
+    }
+    .loc-services li:last-child { border-bottom: none; }
+
     .cta-final {
       background: var(--ciruela); color: #fff;
       border-radius: 30px;
@@ -113,9 +145,10 @@
 
 <!-- HERO -->
 <section class="hero">
-    <span class="hero-badge">Patricia · Esteticista & Cosmetóloga · Montevideo</span>
-    <h1>Tu piel merece<br><em>lo mejor</em></h1>
-    <p>Tratamientos faciales, masajes y cosmetología personalizada. Porque cada piel tiene su historia.</p>
+    <span class="hero-badge">Patricia · Esteticista & Cosmetóloga · @SiteInfo.Barrio</span>
+    <h1>Estética y <em>Cosmetología</em><br>en @SiteInfo.Ciudad</h1>
+    <p class="hero-lead">Tu piel merece lo mejor.</p>
+    <p>Tratamientos faciales, masajes y cosmetología personalizada en @SiteInfo.Barrio. Porque cada piel tiene su historia.</p>
     <div class="d-flex justify-content-center gap-3 flex-wrap">
         <a asp-page="/Services/Index" class="btn btn-primary btn-lg">Ver servicios</a>
         <a href="https://wa.me/598096045127" target="_blank" class="btn btn-outline-secondary btn-lg" style="display:inline-flex;align-items:center;gap:8px;">
@@ -229,6 +262,66 @@
         </div>
     </div>
 </section>
+
+<!-- UBICACION -->
+<div class="container py-5">
+    <div class="about p-4 p-lg-5 shadow-sm">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="section-label">Dónde estoy</span>
+                <h2 class="section-title mb-4">Estética y cosmetología en @SiteInfo.Barrio, @SiteInfo.Ciudad</h2>
+                <p class="text-muted mb-4">
+                    Atiendo con cita previa en @SiteInfo.Barrio, @SiteInfo.Ciudad. Si buscás una
+                    esteticista y cosmetóloga cerca tuyo, escribime por WhatsApp y coordinamos
+                    el horario que mejor te venga.
+                </p>
+                <ul class="loc-list list-unstyled mb-0">
+                    <li>
+                        <i class="bi bi-geo-alt"></i>
+                        @if (SiteInfo.TieneDireccion)
+                        {
+                            <span>
+                                @SiteInfo.Direccion · @SiteInfo.Barrio, @SiteInfo.Ciudad
+                                <a href="@SiteInfo.MapaUrl" target="_blank" rel="noopener" class="loc-map-link">Cómo llegar</a>
+                            </span>
+                        }
+                        else
+                        {
+                            <span>@SiteInfo.Barrio, @SiteInfo.Ciudad · Dirección exacta por WhatsApp</span>
+                        }
+                    </li>
+                    <li>
+                        <i class="bi bi-clock"></i>
+                        @if (SiteInfo.TieneHorarios)
+                        {
+                            <span>@SiteInfo.Horarios</span>
+                        }
+                        else
+                        {
+                            <span>Turnos con cita previa · Consultá disponibilidad</span>
+                        }
+                    </li>
+                    <li>
+                        <i class="bi bi-whatsapp"></i>
+                        <a href="@SiteInfo.WhatsApp" target="_blank">@SiteInfo.TelefonoVisible</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-5">
+                <div class="loc-card">
+                    <h3 class="fs-5 mb-3">Servicios destacados</h3>
+                    <ul class="list-unstyled mb-4 loc-services">
+                        <li>Limpieza facial profunda</li>
+                        <li>Tratamientos faciales</li>
+                        <li>Masajes estéticos</li>
+                        <li>Cosmetología personalizada</li>
+                    </ul>
+                    <a asp-page="/Services/Index" class="btn btn-primary w-100">Ver todos los servicios</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- CTA FINAL -->
 <div class="container py-5">
