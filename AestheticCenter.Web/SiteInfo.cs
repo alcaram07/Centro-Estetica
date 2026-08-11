@@ -29,10 +29,18 @@ public static class SiteInfo
     /// <summary>Calle y número.</summary>
     public static readonly string Direccion = "Coronel Lucas Píriz 2548";
 
-    // TODO: completar con los horarios reales confirmados con Patricia.
+    /// <summary>Texto de los horarios, tal como se muestra en pantalla.</summary>
+    public static readonly string Horarios = "Lunes a viernes de 9:00 a 19:00";
 
-    /// <summary>Ejemplo: "Lunes a viernes de 9:00 a 19:00".</summary>
-    public static readonly string Horarios = "";
+    // Los mismos horarios en el formato que exige schema.org, para que Google
+    // pueda mostrar "Abierto · Cierra a las 19:00" en los resultados locales.
+    public static readonly string[] DiasAtencion =
+        { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+    public static readonly string HoraApertura = "09:00";
+    public static readonly string HoraCierre = "19:00";
+
+    /// <summary>Los días de atención como lista JSON, para incrustar en el JSON-LD.</summary>
+    public static string DiasAtencionJson => "\"" + string.Join("\", \"", DiasAtencion) + "\"";
 
     public static bool TieneDireccion => !string.IsNullOrWhiteSpace(Direccion);
 

@@ -38,8 +38,7 @@
     <meta name="twitter:image" content="@(siteUrl)/images/logo-patic.jpg" />
 
     @* Datos estructurados de negocio local: es lo que permite a Google mostrar el
-       negocio en resultados locales y en Maps. Los datos salen de SiteInfo.
-       Falta agregar openingHoursSpecification cuando se confirmen los horarios. *@
+       negocio en resultados locales y en Maps. Los datos salen de SiteInfo. *@
     @* El prefijo "!" desactiva los tag helpers en este elemento: de lo contrario
        ScriptTagHelper reescribe el atributo y el "+" sale codificado como &#x2B;. *@
     <!script type="application/ld+json">
@@ -69,6 +68,15 @@
         { "@@type": "City", "name": "@SiteInfo.Ciudad" },
         { "@@type": "Place", "name": "@SiteInfo.Barrio, @SiteInfo.Ciudad" }
       ],
+@if (SiteInfo.TieneHorarios)
+{
+      @:"openingHoursSpecification": {
+        @:"@@type": "OpeningHoursSpecification",
+        @:"dayOfWeek": [@Html.Raw(SiteInfo.DiasAtencionJson)],
+        @:"opens": "@SiteInfo.HoraApertura",
+        @:"closes": "@SiteInfo.HoraCierre"
+      @:},
+}
       "knowsAbout": [
         "Estética",
         "Cosmetología",
