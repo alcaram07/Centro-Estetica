@@ -25,6 +25,18 @@
     }
     <title>@pageTitle</title>
 
+    @* Iconos del sitio, generados a partir de images/logo-patic.png. Google toma
+       /favicon.ico (o el rel="icon" de mayor tamaño) para el resultado de búsqueda,
+       y exige que sea cuadrado y de al menos 48px. *@
+    <link rel="icon" href="~/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="48x48" href="~/favicon-48x48.png" asp-append-version="true" />
+    <link rel="icon" type="image/png" sizes="96x96" href="~/favicon-96x96.png" asp-append-version="true" />
+    <link rel="apple-touch-icon" sizes="180x180" href="~/apple-touch-icon.png" asp-append-version="true" />
+    @* .json en lugar de .webmanifest: MapStaticAssets resuelve el content-type por
+       extension y no conoce .webmanifest. *@
+    <link rel="manifest" href="~/manifest.json" />
+    <meta name="theme-color" content="#fdf6f0" />
+
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Pati C Estética" />
     <meta property="og:locale" content="es_UY" />
@@ -50,6 +62,7 @@
       "description": "@metaDescription",
       "url": "@siteUrl",
       "image": "@(siteUrl)/images/logo-patic.jpg",
+      "logo": "@(siteUrl)/icon-512.png",
       "telephone": "@SiteInfo.Telefono",
       "priceRange": "$$",
       "currenciesAccepted": "UYU",
@@ -127,7 +140,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-nude border-bottom sticky-top py-3">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-page="/Index">
-                    <img src="~/images/logo-patic.jpg" alt="Logo Pati C" width="48" height="48" class="rounded-circle shadow-sm logo-blend" asp-append-version="true" />
+                    <img src="~/images/logo-icon.png" alt="Logo Pati C" width="48" height="48" class="rounded-circle shadow-sm" asp-append-version="true" />
                     <div>
                         <div class="nav-brand">Pati C</div>
                         <div class="nav-sub">Estética · Cosmetología</div>
