@@ -32,7 +32,7 @@
                     <tr>
                         <td class="fw-bold">@service.Name</td>
                         <td class="text-muted small">@service.Description</td>
-                        <td>@service.Price.ToString("C")</td>
+                        <td>@SiteInfo.FormatoPrecio(service.Price)</td>
                         <td>@service.DurationMinutes min</td>
                         <td>
                             <div class="btn-group btn-group-sm">

@@ -49,4 +49,18 @@ public static class SiteInfo
         "https://www.google.com/maps/search/?api=1&query=" +
         System.Net.WebUtility.UrlEncode($"{Direccion}, {Barrio}, {Ciudad}, Uruguay");
     public static bool TieneHorarios => !string.IsNullOrWhiteSpace(Horarios);
+
+    /// <summary>
+    /// Precio en pesos uruguayos. El proyecto compila con InvariantGlobalization,
+    /// asi que ToString("C") saldria con el simbolo generico de moneda ("¤") y
+    /// separadores anglosajones; de ahi que el formato se arme a mano.
+    /// </summary>
+    public static string FormatoPrecio(decimal precio) =>
+        "$ " + precio.ToString(precio == decimal.Truncate(precio) ? "#,0" : "#,0.00", PesoUruguayo);
+
+    private static readonly System.Globalization.NumberFormatInfo PesoUruguayo = new()
+    {
+        NumberGroupSeparator = ".",
+        NumberDecimalSeparator = ",",
+    };
 }
