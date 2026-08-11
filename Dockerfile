@@ -25,6 +25,15 @@ COPY --from=publish /app/publish .
 # Set environment variables
 ENV ASPNETCORE_URLS=http://+:8080
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
+# Sin esto el arranque falla en hosts con las instancias de inotify agotadas
+# ("The configured user limit (128) on the number of inotify instances has been
+# reached"): CreateBuilder vigila appsettings.json para recargarlo en caliente,
+# y si no puede crear el watcher no arranca. El contenedor se redespliega
+# entero, asi que esa recarga no aporta nada. El polling cubre cualquier otro
+# watcher que quede, sin volver a tocar inotify.
+ENV DOTNET_hostBuilder__reloadConfigOnChange=false
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "AestheticCenter.Web.dll"]
