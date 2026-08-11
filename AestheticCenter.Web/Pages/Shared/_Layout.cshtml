@@ -1,13 +1,72 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    // Dominio público del sitio. Si se migra a un dominio propio, actualizar también
+    // wwwroot/robots.txt y wwwroot/sitemap.xml, que lo llevan escrito.
+    const string siteUrl = "https://centro-estetica.onrender.com";
+
+    var canonicalUrl = siteUrl + Context.Request.Path.Value?.TrimEnd('/');
+    if (canonicalUrl == siteUrl) { canonicalUrl = siteUrl + "/"; }
+
+    var metaDescription = ViewData["Description"] as string
+        ?? "Pati C Estética & Cosmetología en Montevideo. Tratamientos faciales, masajes y cuidado personal personalizado. Reservá tu turno online.";
+    var pageTitle = $"{ViewData["Title"]} - Pati C Estética";
+}
+<!DOCTYPE html>
+<html lang="es-UY">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Pati C Estética & Cosmetología en Montevideo. Tratamientos faciales, masajes y cuidado personal personalizado. Reserva tu cita online." />
+    <meta name="description" content="@metaDescription" />
     <meta name="google-site-verification" content="-Y4Rtxe_bKWeNlVp8Bkm6zeU0L6n5HPRsz_bAVE0OjE" />
-    <meta name="keywords" content="estetica montevideo, cosmetologia, limpieza facial, masajes, cuidado de la piel, uruguay, pati c" />
     <meta name="author" content="Pati C Estética" />
-    <title>@ViewData["Title"] - Pati C Estética</title>
+    <link rel="canonical" href="@canonicalUrl" />
+    @if (ViewData["Robots"] is string robots)
+    {
+        <meta name="robots" content="@robots" />
+    }
+    <title>@pageTitle</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pati C Estética" />
+    <meta property="og:locale" content="es_UY" />
+    <meta property="og:title" content="@pageTitle" />
+    <meta property="og:description" content="@metaDescription" />
+    <meta property="og:url" content="@canonicalUrl" />
+    <meta property="og:image" content="@(siteUrl)/images/logo-patic.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@pageTitle" />
+    <meta name="twitter:description" content="@metaDescription" />
+    <meta name="twitter:image" content="@(siteUrl)/images/logo-patic.jpg" />
+
+    @* Datos estructurados de negocio local: es lo que permite a Google mostrar el
+       negocio en resultados locales y en Maps. Falta completar streetAddress y los
+       horarios reales de atención. *@
+    @* El prefijo "!" desactiva los tag helpers en este elemento: de lo contrario
+       ScriptTagHelper reescribe el atributo y el "+" sale codificado como &#x2B;. *@
+    <!script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "BeautySalon",
+      "name": "Pati C Estética & Cosmetología",
+      "description": "@metaDescription",
+      "url": "@siteUrl",
+      "image": "@(siteUrl)/images/logo-patic.jpg",
+      "telephone": "+59896045127",
+      "priceRange": "$$",
+      "address": {
+        "@@type": "PostalAddress",
+        "addressLocality": "Montevideo",
+        "addressRegion": "Montevideo",
+        "addressCountry": "UY"
+      },
+      "areaServed": {
+        "@@type": "City",
+        "name": "Montevideo"
+      },
+      "sameAs": [
+        "https://instagram.com/pati.c.estetica"
+      ]
+    }
+    </!script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">

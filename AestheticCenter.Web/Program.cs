@@ -61,7 +61,7 @@ catch (Exception ex)
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage(); // ACTIVADO PARA DIAGNÓSTICO
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 

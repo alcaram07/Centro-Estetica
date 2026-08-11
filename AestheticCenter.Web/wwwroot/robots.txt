@@ -3,4 +3,4 @@ Allow: /
 Disallow: /Admin/
 Disallow: /Identity/
 
-Sitemap: https://patic-estetica.onrender.com/sitemap.xml
+Sitemap: https://centro-estetica.onrender.com/sitemap.xml
