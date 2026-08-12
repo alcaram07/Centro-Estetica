@@ -15,19 +15,23 @@ public class SitemapModel(CatalogoServicios catalogo) : PageModel
 {
     public IActionResult OnGet()
     {
-        var hoy = DateTime.UtcNow.ToString("yyyy-MM-dd");
         var sb = new StringBuilder();
 
         sb.AppendLine("""<?xml version="1.0" encoding="UTF-8"?>""");
         sb.AppendLine("""<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">""");
 
-        Agregar(sb, "/", "1.0", hoy);
-        Agregar(sb, "/Services", "0.8", hoy);
-        Agregar(sb, "/Gallery", "0.8", hoy);
+        // Estas tres van sin lastmod: su contenido sale del código, no de la
+        // base, así que no tenemos una fecha de modificación real que declarar.
+        // Antes se les ponía la del día en curso, con lo cual cada vez que
+        // Google miraba el sitemap le decíamos que todo había cambiado hoy; un
+        // lastmod así de poco confiable termina ignorado.
+        Agregar(sb, "/", "1.0");
+        Agregar(sb, "/Services", "0.8");
+        Agregar(sb, "/Gallery", "0.8");
 
         foreach (var servicio in catalogo.ConPagina)
         {
-            Agregar(sb, $"/Services/{servicio.Slug}", "0.7", hoy);
+            Agregar(sb, $"/Services/{servicio.Slug}", "0.7", servicio.Modificado);
         }
 
         sb.AppendLine("</urlset>");
@@ -35,7 +39,7 @@ public class SitemapModel(CatalogoServicios catalogo) : PageModel
         return Content(sb.ToString(), "application/xml", Encoding.UTF8);
     }
 
-    private static void Agregar(StringBuilder sb, string ruta, string prioridad, string fecha)
+    private static void Agregar(StringBuilder sb, string ruta, string prioridad, DateTime? fecha = null)
     {
         // Los slugs son [a-z0-9-] y las rutas son fijas, pero se escapa igual:
         // los nombres de los tratamientos los carga una persona y el sitemap
@@ -44,7 +48,10 @@ public class SitemapModel(CatalogoServicios catalogo) : PageModel
 
         sb.AppendLine("  <url>");
         sb.AppendLine($"    <loc>{url}</loc>");
-        sb.AppendLine($"    <lastmod>{fecha}</lastmod>");
+        if (fecha.HasValue)
+        {
+            sb.AppendLine($"    <lastmod>{fecha.Value:yyyy-MM-dd}</lastmod>");
+        }
         sb.AppendLine("    <changefreq>weekly</changefreq>");
         sb.AppendLine($"    <priority>{prioridad}</priority>");
         sb.AppendLine("  </url>");

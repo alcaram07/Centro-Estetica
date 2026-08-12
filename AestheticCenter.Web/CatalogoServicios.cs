@@ -10,7 +10,11 @@ namespace AestheticCenter.Web;
 /// Si tiene texto largo cargado. Sin él la página existe pero va con noindex y
 /// queda fuera del sitemap.
 /// </param>
-public record ServicioSeo(string Nombre, string Slug, bool TienePagina);
+/// <param name="Modificado">
+/// Cuándo se guardó por última vez, para el lastmod del sitemap. Nulo en los
+/// servicios anteriores a que se empezara a registrar.
+/// </param>
+public record ServicioSeo(string Nombre, string Slug, bool TienePagina, DateTime? Modificado);
 
 /// <summary>
 /// Los servicios, para los datos estructurados, los enlaces y los textos que lee
@@ -59,12 +63,13 @@ public class CatalogoServicios(IServiceScopeFactory scopeFactory)
             return db.Services
                 .AsNoTracking()
                 .OrderBy(s => s.Id)
-                .Select(s => new { s.Name, s.LongDescription })
+                .Select(s => new { s.Name, s.LongDescription, s.UpdatedAt })
                 .AsEnumerable()
                 .Select(s => new ServicioSeo(
                     s.Name,
                     Slug.Desde(s.Name),
-                    !string.IsNullOrWhiteSpace(s.LongDescription)))
+                    !string.IsNullOrWhiteSpace(s.LongDescription),
+                    s.UpdatedAt))
                 .ToList();
         }
         catch (Exception)

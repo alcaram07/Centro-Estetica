@@ -23,14 +23,20 @@ public class ServiceRepository
         return await _context.Services.FindAsync(id);
     }
 
+    // La fecha se marca acá y no en las páginas del panel para que valga sea cual
+    // sea el camino que termine guardando un servicio. Es la que el sitemap le
+    // declara a Google como lastmod.
+
     public async Task AddAsync(Service service)
     {
+        service.UpdatedAt = DateTime.UtcNow;
         _context.Services.Add(service);
         await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Service service)
     {
+        service.UpdatedAt = DateTime.UtcNow;
         _context.Entry(service).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }

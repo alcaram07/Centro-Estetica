@@ -37,6 +37,16 @@ public class Service
     [DisplayFormat(ConvertEmptyStringToNull = false)]
     public string LongDescription { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Cuándo se guardó por última vez, para declararlo como lastmod en el
+    /// sitemap y que Google sepa si hay algo nuevo que rastrear.
+    ///
+    /// Admite nulo porque los servicios anteriores a este campo no tienen una
+    /// fecha real, y es preferible omitir el dato antes que inventarlo: un
+    /// lastmod poco confiable termina ignorado.
+    /// </summary>
+    public DateTime? UpdatedAt { get; set; }
+
     [Range(0.01, 10000)]
     public decimal Price { get; set; }
 

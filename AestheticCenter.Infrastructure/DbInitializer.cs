@@ -15,6 +15,7 @@ public static class DbInitializer
 
         await InicializarConfiguracionAsync(context);
         await AgregarColumnaTextoLargoAsync(context);
+        await AgregarColumnaFechaAsync(context);
 
         // 1. Crear Roles si no existen
         string[] roleNames = { "Admin", "Customer" };
@@ -113,6 +114,31 @@ public static class DbInitializer
 
         await context.Database.ExecuteSqlRawAsync(
             """ALTER TABLE "Services" ADD COLUMN "LongDescription" TEXT NOT NULL DEFAULT ''""");
+    }
+
+    /// <summary>
+    /// Agrega Services.UpdatedAt si todavía no está: es la fecha que el sitemap
+    /// declara como lastmod.
+    ///
+    /// A diferencia de las otras columnas, acá el tipo sí depende del motor.
+    /// Queda nullable a propósito, para no inventarle una fecha de modificación
+    /// a los servicios que ya existían.
+    /// </summary>
+    private static async Task AgregarColumnaFechaAsync(ApplicationDbContext context)
+    {
+        if (await ExisteColumnaAsync(context, "Services", "UpdatedAt"))
+        {
+            return;
+        }
+
+        // Dos sentencias completas en lugar de interpolar el tipo: el tipo de una
+        // columna no puede viajar como parámetro, y así no queda SQL armado por
+        // concatenación.
+        var sql = context.Database.IsNpgsql()
+            ? """ALTER TABLE "Services" ADD COLUMN "UpdatedAt" timestamp with time zone NULL"""
+            : """ALTER TABLE "Services" ADD COLUMN "UpdatedAt" TEXT NULL""";
+
+        await context.Database.ExecuteSqlRawAsync(sql);
     }
 
     /// <summary>
