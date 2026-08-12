@@ -48,6 +48,15 @@
     .service-link { color: inherit; text-decoration: none; }
     .service-link:hover { color: var(--rosa); }
 
+    .service-mas {
+      display: inline-block; margin-top: 10px;
+      font-size: 13px; color: var(--rosa);
+      text-decoration: none; font-weight: 500;
+    }
+    .service-mas:hover { color: var(--rosa-dark); text-decoration: underline; }
+    .service-mas span { transition: margin-left .15s; }
+    .service-mas:hover span { margin-left: 4px; }
+
     .service-meta {
       text-align: right; flex-shrink: 0;
       margin-left: 20px;
@@ -95,12 +104,15 @@
                             } else {
                                 <span class="service-tag">Tratamiento</span>
                             }
-                            @* El enlace a la página del tratamiento es lo que
-                               permite que Google la descubra. *@
+                            @{ var pagina = $"/Services/{AestheticCenter.Web.Slug.Desde(service.Name)}"; }
                             <h3>
-                                <a href="/Services/@AestheticCenter.Web.Slug.Desde(service.Name)" class="service-link">@service.Name</a>
+                                <a href="@pagina" class="service-link">@service.Name</a>
                             </h3>
                             <p>@service.Description</p>
+                            @* El título ya enlazaba a la página del tratamiento, pero
+                               se veía igual que un texto cualquiera: nadie adivinaba
+                               que se podía entrar. Este enlace lo hace visible. *@
+                            <a href="@pagina" class="service-mas">Ver más <span aria-hidden="true">→</span></a>
                         </div>
                         <div class="service-meta">
                             <div class="service-dur">@service.DurationMinutes min</div>
