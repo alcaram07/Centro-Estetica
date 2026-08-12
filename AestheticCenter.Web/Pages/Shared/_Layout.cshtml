@@ -1,5 +1,6 @@
 ﻿@* Teléfono y dirección salen de la base y se editan en /Admin/Settings. *@
 @inject AestheticCenter.Web.SiteSettingsProvider Sitio
+@inject AestheticCenter.Web.CatalogoServicios Catalogo
 @{
     // Dominio público del sitio. Si se migra a un dominio propio, actualizar también
     // wwwroot/robots.txt y wwwroot/sitemap.xml, que lo llevan escrito.
@@ -99,26 +100,13 @@
         "Masajes estéticos",
         "Cuidado de la piel"
       ],
+      @* El catálogo sale de los servicios cargados en el panel: escrito a mano
+         acá quedaba desfasado de los que realmente se ofrecen. *@
       "hasOfferCatalog": {
         "@@type": "OfferCatalog",
         "name": "Servicios de estética y cosmetología",
         "itemListElement": [
-          {
-            "@@type": "Offer",
-            "itemOffered": { "@@type": "Service", "name": "Limpieza facial profunda" }
-          },
-          {
-            "@@type": "Offer",
-            "itemOffered": { "@@type": "Service", "name": "Tratamientos faciales" }
-          },
-          {
-            "@@type": "Offer",
-            "itemOffered": { "@@type": "Service", "name": "Masajes estéticos" }
-          },
-          {
-            "@@type": "Offer",
-            "itemOffered": { "@@type": "Service", "name": "Cosmetología personalizada" }
-          }
+          @Html.Raw(Catalogo.OfertasJson())
         ]
       },
       "founder": {

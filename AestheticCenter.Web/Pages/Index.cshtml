@@ -1,9 +1,18 @@
 @page
 @model IndexModel
 @inject AestheticCenter.Web.SiteSettingsProvider Sitio
+@inject AestheticCenter.Web.CatalogoServicios Catalogo
 @{
     ViewData["Title"] = "Estética y Cosmetología en Montevideo";
-    ViewData["Description"] = "Esteticista y cosmetóloga en Montevideo. Tratamientos faciales, masajes estéticos y cuidado de la piel personalizado. Reservá tu turno online o por WhatsApp.";
+
+    // La descripción nombra los servicios reales, que es por lo que se busca.
+    // Si son muchos y el texto se pasa del largo que Google muestra (~160
+    // caracteres), se cae al genérico en lugar de publicar una frase cortada.
+    var servicios = Catalogo.EnTexto();
+    var conServicios = $"Esteticista y cosmetóloga en {SiteInfo.Ciudad}: {servicios}. Reservá tu turno online.";
+    ViewData["Description"] = servicios.Length > 0 && conServicios.Length <= 160
+        ? conServicios
+        : "Esteticista y cosmetóloga en Montevideo. Tratamientos faciales, masajes estéticos y cuidado de la piel personalizado. Reservá tu turno online o por WhatsApp.";
 }
 
 <style>
@@ -311,11 +320,13 @@
             <div class="col-lg-5">
                 <div class="loc-card">
                     <h3 class="fs-5 mb-3">Servicios destacados</h3>
+                    @* Los nombres salen de los servicios cargados en el panel:
+                       es por estos términos que buscan las clientas. *@
                     <ul class="list-unstyled mb-4 loc-services">
-                        <li>Limpieza facial profunda</li>
-                        <li>Tratamientos faciales</li>
-                        <li>Masajes estéticos</li>
-                        <li>Cosmetología personalizada</li>
+                        @foreach (var servicio in Catalogo.Nombres)
+                        {
+                            <li>@servicio</li>
+                        }
                     </ul>
                     <a asp-page="/Services/Index" class="btn btn-primary w-100">Ver todos los servicios</a>
                 </div>

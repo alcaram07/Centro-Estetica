@@ -39,6 +39,7 @@ builder.Services.AddScoped<AestheticCenter.Infrastructure.Repositories.Appointme
 // Singleton: cachea la configuración del sitio, que el layout lee en todas las
 // páginas. Toma sus propios scopes para acceder al DbContext.
 builder.Services.AddSingleton<AestheticCenter.Web.SiteSettingsProvider>();
+builder.Services.AddSingleton<AestheticCenter.Web.CatalogoServicios>();
 
 builder.Services.AddRazorPages();
 

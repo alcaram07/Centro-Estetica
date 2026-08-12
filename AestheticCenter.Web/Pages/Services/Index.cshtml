@@ -2,7 +2,15 @@
 @model AestheticCenter.Web.Pages.Services.IndexModel
 @{
     ViewData["Title"] = "Servicios de Estética en Montevideo";
-    ViewData["Description"] = "Limpiezas faciales, masajes estéticos y tratamientos de cosmetología en Montevideo. Conocé todos los servicios de Pati C y reservá tu turno online.";
+
+    // Los nombres reales de los tratamientos, que es lo que se busca en Google.
+    // Si la lista crece y pasa el largo que Google muestra (~160 caracteres),
+    // se cae al texto genérico antes que publicar una frase cortada.
+    var nombres = string.Join(", ", Model.Services.Select(s => s.Name));
+    var conNombres = $"{nombres} en {SiteInfo.Ciudad}. Reservá tu turno online con Pati C Estética.";
+    ViewData["Description"] = nombres.Length > 0 && conNombres.Length <= 160
+        ? conNombres
+        : "Limpiezas faciales, masajes estéticos y tratamientos de cosmetología en Montevideo. Conocé todos los servicios de Pati C y reservá tu turno online.";
 }
 
 <style>
