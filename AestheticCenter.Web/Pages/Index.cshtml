@@ -161,8 +161,11 @@
     <p>Tratamientos faciales, masajes y cosmetología personalizada en @SiteInfo.Barrio. Porque cada piel tiene su historia.</p>
     <div class="d-flex justify-content-center gap-3 flex-wrap">
         <a asp-page="/Services/Index" class="btn btn-primary btn-lg">Ver servicios</a>
-        <a href="@Sitio.WhatsApp" target="_blank" class="btn btn-outline-secondary btn-lg" style="display:inline-flex;align-items:center;gap:8px;">
-            <i class="bi bi-whatsapp"></i> Hablar por WhatsApp
+        @* El texto acompaña al mensaje que se abre: si el chat arranca pidiendo
+           hora, el botón no puede invitar solo a "hablar". *@
+        <a href="@Sitio.WhatsAppCon("Hola Patricia! Quiero reservar hora.")" target="_blank" rel="noopener"
+           class="btn btn-outline-secondary btn-lg" style="display:inline-flex;align-items:center;gap:8px;">
+            <i class="bi bi-whatsapp"></i> Reservar por WhatsApp
         </a>
     </div>
     <div class="hero-pills">
@@ -313,7 +316,7 @@
                     </li>
                     <li>
                         <i class="bi bi-whatsapp"></i>
-                        <a href="@Sitio.WhatsApp" target="_blank">@Sitio.TelefonoVisible</a>
+                        <a href="@Sitio.WhatsAppCon("Hola Patricia! Quiero reservar hora.")" target="_blank" rel="noopener">@Sitio.TelefonoVisible</a>
                     </li>
                 </ul>
             </div>
@@ -342,7 +345,8 @@
         <p class="lead mb-5 opacity-75 text-white">Elegí tu tratamiento y escribime por WhatsApp. ¡Te espero!</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
             <a asp-page="/Services/Index" class="btn btn-light btn-lg rounded-pill px-5 text-ciruela fw-bold">Ver tratamientos</a>
-            <a href="@Sitio.WhatsApp" target="_blank" class="btn btn-outline-light btn-lg rounded-pill px-5">WhatsApp</a>
+            <a href="@Sitio.WhatsAppCon("Hola Patricia! Quiero reservar hora.")" target="_blank" rel="noopener"
+               class="btn btn-outline-light btn-lg rounded-pill px-5">Reservar por WhatsApp</a>
         </div>
     </section>
 </div>
