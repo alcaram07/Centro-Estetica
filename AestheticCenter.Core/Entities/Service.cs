@@ -19,6 +19,22 @@ public class Service
     /// entra al sitemap: una página con dos líneas no la posiciona Google y
     /// resta más de lo que suma.
     /// </summary>
+    /// <remarks>
+    /// Los dos atributos son para que el campo pueda quedar vacío, que es lo
+    /// normal hasta que se escriba el texto. Sin ellos, el alta y la edición de
+    /// servicios fallaban con "The LongDescription field is required":
+    ///
+    /// - El proyecto compila con referencias nulables activadas y ASP.NET da
+    ///   por obligatoria toda propiedad string que no sea nulable, así que hace
+    ///   falta un Required propio que admita texto vacío.
+    /// - Aun así seguía fallando, porque el enlazador convierte la cadena vacía
+    ///   en null antes de validar y la validación la rechazaba igual.
+    ///
+    /// Se resuelve por acá y no haciendo la columna nulable, que obligaría a
+    /// tocar el esquema en producción.
+    /// </remarks>
+    [Required(AllowEmptyStrings = true)]
+    [DisplayFormat(ConvertEmptyStringToNull = false)]
     public string LongDescription { get; set; } = string.Empty;
 
     [Range(0.01, 10000)]
