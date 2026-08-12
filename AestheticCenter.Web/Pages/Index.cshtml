@@ -9,10 +9,10 @@
     // Si son muchos y el texto se pasa del largo que Google muestra (~160
     // caracteres), se cae al genérico en lugar de publicar una frase cortada.
     var servicios = Catalogo.EnTexto();
-    var conServicios = $"Esteticista y cosmetóloga en {SiteInfo.Ciudad}: {servicios}. Reservá tu turno online.";
+    var conServicios = $"Esteticista y cosmetóloga en {SiteInfo.Ciudad}: {servicios}. Reservá por WhatsApp.";
     ViewData["Description"] = servicios.Length > 0 && conServicios.Length <= 160
         ? conServicios
-        : "Esteticista y cosmetóloga en Montevideo. Tratamientos faciales, masajes estéticos y cuidado de la piel personalizado. Reservá tu turno online o por WhatsApp.";
+        : "Esteticista y cosmetóloga en Montevideo. Tratamientos faciales, masajes estéticos y cuidado de la piel personalizado. Reservá tu turno por WhatsApp.";
 }
 
 <style>
@@ -203,7 +203,7 @@
             <div class="feat-card shadow-sm">
                 <div class="feat-icon icon-peach">📅</div>
                 <h3 class="section-title fs-4">Turnos fáciles</h3>
-                <p class="text-muted">Reservá tu turno online en segundos, desde donde estés y cuando quieras.</p>
+                <p class="text-muted">Elegí tu tratamiento y escribime por WhatsApp: coordinamos el día y la hora que mejor te queden.</p>
             </div>
         </div>
         <div class="col-md-4">
@@ -339,9 +339,9 @@
 <div class="container py-5">
     <section class="cta-final text-center shadow">
         <h2 class="section-title text-white mb-3">¿Lista para tu próximo turno?</h2>
-        <p class="lead mb-5 opacity-75 text-white">Reservá online o escribime directo por WhatsApp. ¡Te espero!</p>
+        <p class="lead mb-5 opacity-75 text-white">Elegí tu tratamiento y escribime por WhatsApp. ¡Te espero!</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a asp-page="/Services/Index" class="btn btn-light btn-lg rounded-pill px-5 text-ciruela fw-bold">Reservar ahora</a>
+            <a asp-page="/Services/Index" class="btn btn-light btn-lg rounded-pill px-5 text-ciruela fw-bold">Ver tratamientos</a>
             <a href="@Sitio.WhatsApp" target="_blank" class="btn btn-outline-light btn-lg rounded-pill px-5">WhatsApp</a>
         </div>
     </section>

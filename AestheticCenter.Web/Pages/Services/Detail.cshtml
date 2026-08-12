@@ -7,10 +7,10 @@
 
     // La descripción arranca con el nombre del tratamiento, que es lo que se
     // escribe en el buscador. Se recorta al largo que Google muestra (~160).
-    var descripcion = $"{nombre} en {SiteInfo.Ciudad}. {Model.Servicio.Description} Reservá tu turno con Pati C Estética.";
+    var descripcion = $"{nombre} en {SiteInfo.Ciudad}. {Model.Servicio.Description} Reservá por WhatsApp con Pati C Estética.";
     ViewData["Description"] = descripcion.Length <= 160
         ? descripcion
-        : $"{nombre} en {SiteInfo.Ciudad}. Reservá tu turno online con Pati C Estética.";
+        : $"{nombre} en {SiteInfo.Ciudad}. Reservá por WhatsApp con Pati C Estética.";
 
     if (!Model.ListaParaGoogle)
     {
@@ -66,12 +66,12 @@
             <p class="detalle-corto">@Model.Servicio.Description</p>
         }
 
-        <div class="d-flex flex-wrap gap-3 mt-5">
-            <a asp-page="/Appointments/Book" asp-route-serviceId="@Model.Servicio.Id"
-               class="btn btn-primary btn-lg rounded-pill px-4">Reservar turno</a>
-            <a href="@Sitio.WhatsAppCon($"Hola Patricia, quiero consultar sobre {nombre}")"
-               target="_blank" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
-                <i class="bi bi-whatsapp"></i> Consultar por WhatsApp
+        @* Un solo botón: la reserva es por WhatsApp, así que el que estaba al
+           lado para consultar terminaba en el mismo lugar. *@
+        <div class="mt-5">
+            <a href="@Sitio.WhatsAppCon($"Hola Patricia! Quiero reservar hora para {nombre}.")"
+               target="_blank" rel="noopener" class="btn btn-primary btn-lg rounded-pill px-4">
+                <i class="bi bi-whatsapp"></i> Reservar por WhatsApp
             </a>
         </div>
     </div>

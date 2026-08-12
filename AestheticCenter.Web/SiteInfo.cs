@@ -15,6 +15,21 @@ public static class SiteInfo
 {
     public static readonly string Url = "https://centro-estetica.onrender.com";
 
+    /// <summary>
+    /// La reserva de turnos online. Apagada: el sitio funciona como landing y
+    /// los turnos se coordinan por WhatsApp, con el tratamiento ya escrito en el
+    /// mensaje.
+    ///
+    /// El módulo de citas quedó entero (páginas, base y panel). Para volver a
+    /// activarlo hay que poner esto en true y devolver los enlaces a
+    /// /Appointments/Book en Services/Index.cshtml y Services/Detail.cshtml.
+    ///
+    /// Es "static readonly" y no "const" a propósito: como const, el compilador
+    /// resolvería las condiciones y marcaría el resto del flujo como código
+    /// inalcanzable.
+    /// </summary>
+    public static readonly bool ReservaOnlineActiva = false;
+
     public static readonly string Barrio = "La Blanqueada";
     public static readonly string Ciudad = "Montevideo";
     public static readonly string CodigoPostal = "11600";

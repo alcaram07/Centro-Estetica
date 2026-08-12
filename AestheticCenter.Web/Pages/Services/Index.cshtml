@@ -1,5 +1,6 @@
 @page
 @model AestheticCenter.Web.Pages.Services.IndexModel
+@inject AestheticCenter.Web.SiteSettingsProvider Sitio
 @{
     ViewData["Title"] = "Servicios de Estética en Montevideo";
 
@@ -7,10 +8,10 @@
     // Si la lista crece y pasa el largo que Google muestra (~160 caracteres),
     // se cae al texto genérico antes que publicar una frase cortada.
     var nombres = string.Join(", ", Model.Services.Select(s => s.Name));
-    var conNombres = $"{nombres} en {SiteInfo.Ciudad}. Reservá tu turno online con Pati C Estética.";
+    var conNombres = $"{nombres} en {SiteInfo.Ciudad}. Reservá por WhatsApp con Pati C Estética.";
     ViewData["Description"] = nombres.Length > 0 && conNombres.Length <= 160
         ? conNombres
-        : "Limpiezas faciales, masajes estéticos y tratamientos de cosmetología en Montevideo. Conocé todos los servicios de Pati C y reservá tu turno online.";
+        : "Limpiezas faciales, masajes estéticos y tratamientos de cosmetología en Montevideo. Conocé todos los servicios de Pati C y reservá por WhatsApp.";
 }
 
 <style>
@@ -103,7 +104,10 @@
                         </div>
                         <div class="service-meta">
                             <div class="service-dur">@service.DurationMinutes min</div>
-                            <a asp-page="/Appointments/Book" asp-route-serviceId="@service.Id" class="service-btn">Reservar</a>
+                            @* Abre WhatsApp con el mensaje ya escrito, nombrando
+                               este tratamiento: la clienta solo aprieta enviar. *@
+                            <a href="@Sitio.WhatsAppCon($"Hola Patricia! Quiero reservar hora para {service.Name}.")"
+                               target="_blank" rel="noopener" class="service-btn">Reservar</a>
                         </div>
                     </div>
                 </div>

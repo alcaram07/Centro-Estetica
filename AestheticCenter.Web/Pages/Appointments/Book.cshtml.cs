@@ -37,6 +37,14 @@ public class BookModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int serviceId)
     {
+        // Ningún enlace apunta acá mientras la reserva esté apagada, pero la URL
+        // sigue respondiendo y Google pudo haberla guardado: se desvía en lugar
+        // de mostrar un formulario que nadie atiende.
+        if (!SiteInfo.ReservaOnlineActiva)
+        {
+            return RedirectToPage("/Services/Index");
+        }
+
         ServiceId = serviceId;
         SelectedService = await _serviceRepository.GetByIdAsync(serviceId);
 
@@ -50,6 +58,13 @@ public class BookModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
+        // Con la reserva apagada tampoco se aceptan envíos, aunque alguien tenga
+        // el formulario abierto de antes.
+        if (!SiteInfo.ReservaOnlineActiva)
+        {
+            return RedirectToPage("/Services/Index");
+        }
+
         SelectedService = await _serviceRepository.GetByIdAsync(ServiceId);
         
         if (SelectedService == null)

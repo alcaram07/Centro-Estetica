@@ -41,7 +41,19 @@ builder.Services.AddScoped<AestheticCenter.Infrastructure.Repositories.Appointme
 builder.Services.AddSingleton<AestheticCenter.Web.SiteSettingsProvider>();
 builder.Services.AddSingleton<AestheticCenter.Web.CatalogoServicios>();
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(opciones =>
+{
+    // Las páginas de reserva llevan [Authorize], así que con la reserva apagada
+    // una visitante caía en la pantalla de login antes de que el propio OnGet
+    // pudiera desviarla. Dejándolas anónimas, llega al OnGet y este la manda a
+    // Servicios. Cuando ReservaOnlineActiva vuelva a true, vuelven a pedir
+    // sesión sin tocar nada más.
+    if (!AestheticCenter.Web.SiteInfo.ReservaOnlineActiva)
+    {
+        opciones.Conventions.AllowAnonymousToPage("/Appointments/Book");
+        opciones.Conventions.AllowAnonymousToPage("/Appointments/MyAppointments");
+    }
+});
 
 var app = builder.Build();
 

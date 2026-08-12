@@ -37,9 +37,9 @@
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Registrarse</a>
-    </li>
+    @* Sin reservas online una clienta no tiene por qué crearse una cuenta, así
+       que el registro sale del menú. "Iniciar sesión" queda porque es la
+       entrada al panel. La página de registro sigue existiendo. *@
     <li class="nav-item">
         <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Iniciar sesión</a>
     </li>
