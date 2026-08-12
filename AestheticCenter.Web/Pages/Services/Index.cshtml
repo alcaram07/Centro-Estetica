@@ -44,6 +44,8 @@
       margin-bottom: 12px;
     }
     .service-card p { font-size: 14px; color: var(--text-soft); line-height: 1.55; }
+    .service-link { color: inherit; text-decoration: none; }
+    .service-link:hover { color: var(--rosa); }
 
     .service-meta {
       text-align: right; flex-shrink: 0;
@@ -92,7 +94,11 @@
                             } else {
                                 <span class="service-tag">Tratamiento</span>
                             }
-                            <h3>@service.Name</h3>
+                            @* El enlace a la página del tratamiento es lo que
+                               permite que Google la descubra. *@
+                            <h3>
+                                <a href="/Services/@AestheticCenter.Web.Slug.Desde(service.Name)" class="service-link">@service.Name</a>
+                            </h3>
                             <p>@service.Description</p>
                         </div>
                         <div class="service-meta">

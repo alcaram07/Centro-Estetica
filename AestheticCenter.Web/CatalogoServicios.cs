@@ -3,10 +3,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AestheticCenter.Web;
 
+/// <summary>Un servicio, con lo que hace falta para armar sus enlaces y su SEO.</summary>
+/// <param name="Nombre">Como se muestra y como se le declara a Google.</param>
+/// <param name="Slug">La parte final de la URL de su página propia.</param>
+/// <param name="TienePagina">
+/// Si tiene texto largo cargado. Sin él la página existe pero va con noindex y
+/// queda fuera del sitemap.
+/// </param>
+public record ServicioSeo(string Nombre, string Slug, bool TienePagina);
+
 /// <summary>
-/// Los nombres de los servicios, para los datos estructurados y los textos que
-/// lee Google. Antes el catálogo del JSON-LD estaba escrito a mano en el layout
-/// y había quedado desfasado de los servicios que realmente se ofrecen.
+/// Los servicios, para los datos estructurados, los enlaces y los textos que lee
+/// Google. Antes el catálogo del JSON-LD estaba escrito a mano en el layout y
+/// había quedado desfasado de los servicios que realmente se ofrecen.
 ///
 /// Cachea unos minutos porque el layout lo usa en todas las páginas. No hay
 /// invalidación explícita al editar un servicio: el desfasaje dura lo que la
@@ -17,10 +26,10 @@ public class CatalogoServicios(IServiceScopeFactory scopeFactory)
     private static readonly TimeSpan Vigencia = TimeSpan.FromMinutes(10);
 
     private readonly object _candado = new();
-    private IReadOnlyList<string>? _cache;
+    private IReadOnlyList<ServicioSeo>? _cache;
     private DateTime _cargado = DateTime.MinValue;
 
-    public IReadOnlyList<string> Nombres
+    public IReadOnlyList<ServicioSeo> Servicios
     {
         get
         {
@@ -36,7 +45,12 @@ public class CatalogoServicios(IServiceScopeFactory scopeFactory)
         }
     }
 
-    private IReadOnlyList<string> Cargar()
+    public IEnumerable<string> Nombres => Servicios.Select(s => s.Nombre);
+
+    /// <summary>Solo los que tienen texto: son los únicos que se le ofrecen a Google.</summary>
+    public IEnumerable<ServicioSeo> ConPagina => Servicios.Where(s => s.TienePagina);
+
+    private IReadOnlyList<ServicioSeo> Cargar()
     {
         try
         {
@@ -45,7 +59,12 @@ public class CatalogoServicios(IServiceScopeFactory scopeFactory)
             return db.Services
                 .AsNoTracking()
                 .OrderBy(s => s.Id)
-                .Select(s => s.Name)
+                .Select(s => new { s.Name, s.LongDescription })
+                .AsEnumerable()
+                .Select(s => new ServicioSeo(
+                    s.Name,
+                    Slug.Desde(s.Name),
+                    !string.IsNullOrWhiteSpace(s.LongDescription)))
                 .ToList();
         }
         catch (Exception)
@@ -70,7 +89,7 @@ public class CatalogoServicios(IServiceScopeFactory scopeFactory)
     /// <summary>Los nombres en una frase, para las descripciones de las páginas.</summary>
     public string EnTexto()
     {
-        var nombres = Nombres;
+        var nombres = Nombres.ToList();
         if (nombres.Count == 0)
         {
             return string.Empty;

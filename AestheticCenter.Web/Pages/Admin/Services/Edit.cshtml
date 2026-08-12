@@ -25,6 +25,22 @@
                         <label asp-for="Service.Description" class="form-label">Descripción</label>
                         <textarea asp-for="Service.Description" class="form-control" rows="3"></textarea>
                         <span asp-validation-for="Service.Description" class="text-danger"></span>
+                        <div class="form-text">Una frase, para la tarjeta del listado.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Service.LongDescription" class="form-label">Texto de la página del tratamiento</label>
+                        <textarea asp-for="Service.LongDescription" class="form-control" rows="8"
+                                  placeholder="Qué incluye, cuánto dura, para qué tipo de piel, qué esperar después..."></textarea>
+                        <span asp-validation-for="Service.LongDescription" class="text-danger"></span>
+                        <div class="form-text">
+                            Este texto se publica como página propia del tratamiento y es lo que
+                            hace que Google lo encuentre por su nombre. Separá los párrafos con
+                            una línea en blanco.
+                            <br />
+                            Mientras esté vacío, la página existe pero se le pide a Google que no
+                            la muestre: una página de dos líneas no posiciona.
+                        </div>
                     </div>
 
                     <div class="row">

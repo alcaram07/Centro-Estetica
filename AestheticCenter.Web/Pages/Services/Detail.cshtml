@@ -1,0 +1,103 @@
+@page "/Services/{slug}"
+@model AestheticCenter.Web.Pages.Services.DetailModel
+@inject AestheticCenter.Web.SiteSettingsProvider Sitio
+@{
+    var nombre = Model.Servicio.Name;
+    ViewData["Title"] = $"{nombre} en {SiteInfo.Ciudad}";
+
+    // La descripción arranca con el nombre del tratamiento, que es lo que se
+    // escribe en el buscador. Se recorta al largo que Google muestra (~160).
+    var descripcion = $"{nombre} en {SiteInfo.Ciudad}. {Model.Servicio.Description} Reservá tu turno con Pati C Estética.";
+    ViewData["Description"] = descripcion.Length <= 160
+        ? descripcion
+        : $"{nombre} en {SiteInfo.Ciudad}. Reservá tu turno online con Pati C Estética.";
+
+    if (!Model.ListaParaGoogle)
+    {
+        // "follow" para que igual siga los enlaces hacia el resto del sitio.
+        ViewData["Robots"] = "noindex, follow";
+    }
+
+    // Los saltos de línea del panel se convierten en párrafos. Razor escapa cada
+    // uno al imprimirlo, así que el texto cargado no puede inyectar HTML.
+    var parrafos = (Model.Servicio.LongDescription ?? string.Empty)
+        .Replace("\r\n", "\n")
+        .Split("\n\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+}
+
+<style>
+    .detalle-wrap { max-width: 760px; margin: 0 auto; }
+    .detalle-volver {
+      font-size: 13px; color: var(--text-mid);
+      text-decoration: none; display: inline-block; margin-bottom: 18px;
+    }
+    .detalle-volver:hover { color: var(--rosa); }
+    .detalle-dur {
+      display: inline-block; font-size: 13px; color: #b09090;
+      border: 0.5px solid var(--border); border-radius: 18px;
+      padding: 5px 16px; margin-bottom: 26px;
+    }
+    .detalle-texto p { font-size: 16px; color: var(--text-soft); line-height: 1.75; margin-bottom: 18px; }
+    .detalle-corto { font-size: 17px; color: var(--text-mid); line-height: 1.7; }
+</style>
+
+<div class="container py-5">
+    <div class="detalle-wrap">
+        <a asp-page="/Services/Index" class="detalle-volver">← Todos los servicios</a>
+
+        <span class="section-label">Tratamiento</span>
+        <h1 class="section-title mb-3">@nombre</h1>
+
+        <div class="detalle-dur">@Model.Servicio.DurationMinutes minutos</div>
+
+        @if (parrafos.Length > 0)
+        {
+            <div class="detalle-texto">
+                @foreach (var parrafo in parrafos)
+                {
+                    <p>@parrafo</p>
+                }
+            </div>
+        }
+        else
+        {
+            @* Todavía sin texto cargado: se muestra la descripción corta para no
+               dejar la página vacía. Arriba ya quedó marcada como noindex. *@
+            <p class="detalle-corto">@Model.Servicio.Description</p>
+        }
+
+        <div class="d-flex flex-wrap gap-3 mt-5">
+            <a asp-page="/Appointments/Book" asp-route-serviceId="@Model.Servicio.Id"
+               class="btn btn-primary btn-lg rounded-pill px-4">Reservar turno</a>
+            <a href="@Sitio.WhatsAppCon($"Hola Patricia, quiero consultar sobre {nombre}")"
+               target="_blank" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                <i class="bi bi-whatsapp"></i> Consultar por WhatsApp
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (Model.ListaParaGoogle)
+{
+    @* Datos estructurados propios del tratamiento. Solo se publican cuando la
+       página tiene texto: si no, se le estaría declarando a Google una página
+       que al mismo tiempo se le pide no indexar. *@
+    @* El prefijo "!" desactiva los tag helpers, igual que en el layout. *@
+    <!script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "Service",
+      "name": "@Html.Raw(JsonLd.Texto(nombre))",
+      "description": "@Html.Raw(JsonLd.Texto(Model.Servicio.Description))",
+      "url": "@(SiteInfo.Url)/Services/@AestheticCenter.Web.Slug.Desde(nombre)",
+      "serviceType": "@Html.Raw(JsonLd.Texto(nombre))",
+      "areaServed": { "@@type": "City", "name": "@SiteInfo.Ciudad" },
+      "provider": {
+        "@@type": "BeautySalon",
+        "name": "Pati C Estética & Cosmetología",
+        "url": "@SiteInfo.Url",
+        "telephone": "@Html.Raw(JsonLd.Texto(Sitio.Telefono))"
+      }
+    }
+    </!script>
+}

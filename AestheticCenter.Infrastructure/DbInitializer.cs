@@ -14,6 +14,7 @@ public static class DbInitializer
         await context.Database.EnsureCreatedAsync();
 
         await InicializarConfiguracionAsync(context);
+        await AgregarColumnaTextoLargoAsync(context);
 
         // 1. Crear Roles si no existen
         string[] roleNames = { "Admin", "Customer" };
@@ -94,5 +95,68 @@ public static class DbInitializer
             Address = "Coronel Lucas Píriz 2548",
         });
         await context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Agrega Services.LongDescription si todavía no está.
+    ///
+    /// Mismo problema que la tabla de configuración: sin migraciones,
+    /// EnsureCreated no modifica una base que ya existe. Acá no sirve un
+    /// "IF NOT EXISTS" porque SQLite no lo acepta en ADD COLUMN.
+    /// </summary>
+    private static async Task AgregarColumnaTextoLargoAsync(ApplicationDbContext context)
+    {
+        if (await ExisteColumnaAsync(context, "Services", "LongDescription"))
+        {
+            return;
+        }
+
+        await context.Database.ExecuteSqlRawAsync(
+            """ALTER TABLE "Services" ADD COLUMN "LongDescription" TEXT NOT NULL DEFAULT ''""");
+    }
+
+    /// <summary>
+    /// Si una columna existe, preguntándole al motor por las columnas que
+    /// devuelve la tabla.
+    ///
+    /// Se lee del reader en vez de consultar el catálogo del motor (PRAGMA en
+    /// SQLite, information_schema en PostgreSQL) para no escribir una consulta
+    /// por dialecto. Tampoco sirve intentar un SELECT de la columna y esperar
+    /// que falle: ExecuteSqlRaw lo da por ejecutado sin evaluarlo, y la
+    /// excepción nunca llega.
+    /// </summary>
+    private static async Task<bool> ExisteColumnaAsync(
+        ApplicationDbContext context, string tabla, string columna)
+    {
+        var conexion = context.Database.GetDbConnection();
+        var estabaCerrada = conexion.State != System.Data.ConnectionState.Open;
+
+        if (estabaCerrada)
+        {
+            await conexion.OpenAsync();
+        }
+
+        try
+        {
+            using var comando = conexion.CreateCommand();
+            comando.CommandText = $"""SELECT * FROM "{tabla}" WHERE 1 = 0""";
+
+            using var reader = await comando.ExecuteReaderAsync();
+            for (var i = 0; i < reader.FieldCount; i++)
+            {
+                if (string.Equals(reader.GetName(i), columna, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        finally
+        {
+            if (estabaCerrada)
+            {
+                await conexion.CloseAsync();
+            }
+        }
     }
 }
