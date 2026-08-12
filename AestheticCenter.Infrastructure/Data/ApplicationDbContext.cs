@@ -13,6 +13,7 @@ public class ApplicationDbContext : IdentityDbContext
 
     public DbSet<Service> Services { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<SiteSettings> SiteSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -38,5 +39,14 @@ public class ApplicationDbContext : IdentityDbContext
         builder.Entity<Service>()
             .Property(s => s.Price)
             .HasPrecision(18, 2);
+
+        // El nombre va explícito porque DbInitializer crea esta tabla por SQL y
+        // los dos tienen que coincidir. La clave no es autogenerada: la fila es
+        // siempre la 1.
+        builder.Entity<SiteSettings>(e =>
+        {
+            e.ToTable("SiteSettings");
+            e.Property(s => s.Id).ValueGeneratedNever();
+        });
     }
 }

@@ -1,5 +1,6 @@
 @page
 @model IndexModel
+@inject AestheticCenter.Web.SiteSettingsProvider Sitio
 @{
     ViewData["Title"] = "Estética y Cosmetología en Montevideo";
     ViewData["Description"] = "Esteticista y cosmetóloga en Montevideo. Tratamientos faciales, masajes estéticos y cuidado de la piel personalizado. Reservá tu turno online o por WhatsApp.";
@@ -151,7 +152,7 @@
     <p>Tratamientos faciales, masajes y cosmetología personalizada en @SiteInfo.Barrio. Porque cada piel tiene su historia.</p>
     <div class="d-flex justify-content-center gap-3 flex-wrap">
         <a asp-page="/Services/Index" class="btn btn-primary btn-lg">Ver servicios</a>
-        <a href="https://wa.me/598096045127" target="_blank" class="btn btn-outline-secondary btn-lg" style="display:inline-flex;align-items:center;gap:8px;">
+        <a href="@Sitio.WhatsApp" target="_blank" class="btn btn-outline-secondary btn-lg" style="display:inline-flex;align-items:center;gap:8px;">
             <i class="bi bi-whatsapp"></i> Hablar por WhatsApp
         </a>
     </div>
@@ -278,11 +279,11 @@
                 <ul class="loc-list list-unstyled mb-0">
                     <li>
                         <i class="bi bi-geo-alt"></i>
-                        @if (SiteInfo.TieneDireccion)
+                        @if (Sitio.TieneDireccion)
                         {
                             <span>
-                                @SiteInfo.Direccion · @SiteInfo.Barrio, @SiteInfo.Ciudad
-                                <a href="@SiteInfo.MapaUrl" target="_blank" rel="noopener" class="loc-map-link">Cómo llegar</a>
+                                @Sitio.Direccion · @SiteInfo.Barrio, @SiteInfo.Ciudad
+                                <a href="@Sitio.MapaUrl" target="_blank" rel="noopener" class="loc-map-link">Cómo llegar</a>
                             </span>
                         }
                         else
@@ -303,7 +304,7 @@
                     </li>
                     <li>
                         <i class="bi bi-whatsapp"></i>
-                        <a href="@SiteInfo.WhatsApp" target="_blank">@SiteInfo.TelefonoVisible</a>
+                        <a href="@Sitio.WhatsApp" target="_blank">@Sitio.TelefonoVisible</a>
                     </li>
                 </ul>
             </div>
@@ -330,7 +331,7 @@
         <p class="lead mb-5 opacity-75 text-white">Reservá online o escribime directo por WhatsApp. ¡Te espero!</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
             <a asp-page="/Services/Index" class="btn btn-light btn-lg rounded-pill px-5 text-ciruela fw-bold">Reservar ahora</a>
-            <a href="https://wa.me/598096045127" target="_blank" class="btn btn-outline-light btn-lg rounded-pill px-5">WhatsApp</a>
+            <a href="@Sitio.WhatsApp" target="_blank" class="btn btn-outline-light btn-lg rounded-pill px-5">WhatsApp</a>
         </div>
     </section>
 </div>

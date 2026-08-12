@@ -1,4 +1,6 @@
-﻿@{
+﻿@* Teléfono y dirección salen de la base y se editan en /Admin/Settings. *@
+@inject AestheticCenter.Web.SiteSettingsProvider Sitio
+@{
     // Dominio público del sitio. Si se migra a un dominio propio, actualizar también
     // wwwroot/robots.txt y wwwroot/sitemap.xml, que lo llevan escrito.
     var siteUrl = SiteInfo.Url;
@@ -59,18 +61,18 @@
       "@@type": "BeautySalon",
       "name": "Pati C Estética & Cosmetología",
       "alternateName": "Pati C Estética",
-      "description": "@metaDescription",
+      "description": "@Html.Raw(JsonLd.Texto(metaDescription))",
       "url": "@siteUrl",
       "image": "@(siteUrl)/images/logo-patic.jpg",
       "logo": "@(siteUrl)/icon-512.png",
-      "telephone": "@SiteInfo.Telefono",
+      "telephone": "@Html.Raw(JsonLd.Texto(Sitio.Telefono))",
       "priceRange": "$$",
       "currenciesAccepted": "UYU",
       "address": {
         "@@type": "PostalAddress",
-@if (SiteInfo.TieneDireccion)
+@if (Sitio.TieneDireccion)
 {
-        @:"streetAddress": "@SiteInfo.Direccion",
+        @:"streetAddress": "@Html.Raw(JsonLd.Texto(Sitio.Direccion))",
 }
         "addressLocality": "@SiteInfo.Ciudad",
         "addressRegion": "@SiteInfo.Ciudad",
@@ -168,10 +170,13 @@
                             <li class="nav-item">
                                 <a class="nav-link text-primary fw-bold" asp-page="/Admin/Services/Index">Servicios Admin</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-primary fw-bold" asp-page="/Admin/Settings">Configuración</a>
+                            </li>
                         }
                     </ul>
                     <partial name="_LoginPartial" />
-                    <a href="https://wa.me/598096045127" target="_blank" class="nav-cta ms-lg-3 mt-3 mt-lg-0 text-center text-decoration-none">Reservar turno</a>
+                    <a href="@Sitio.WhatsApp" target="_blank" class="nav-cta ms-lg-3 mt-3 mt-lg-0 text-center text-decoration-none">Reservar turno</a>
                 </div>
             </div>
         </nav>
@@ -197,7 +202,7 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/598096045127?text=Hola%20Patricia%2C%20quiero%20consultar%20sobre%20los%20servicios"
+    <a href="@Sitio.WhatsAppCon("Hola Patricia, quiero consultar sobre los servicios")"
        target="_blank" class="wa-float shadow" title="Escribir por WhatsApp">
         <i class="bi bi-whatsapp"></i>
     </a>

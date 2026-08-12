@@ -1,0 +1,66 @@
+@page
+@model AestheticCenter.Web.Pages.Admin.SettingsModel
+@{
+    ViewData["Title"] = "Configuración del Sitio";
+    ViewData["Robots"] = "noindex, nofollow";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white py-3">
+                <h2 class="mb-0 fs-4">Configuración del Sitio</h2>
+            </div>
+            <div class="card-body p-4">
+                @if (Model.Guardado)
+                {
+                    <div class="alert alert-success">
+                        Datos guardados. Ya se ven actualizados en todo el sitio.
+                    </div>
+                }
+
+                <p class="text-muted small mb-4">
+                    Estos datos aparecen en los botones de WhatsApp, en el bloque de contacto
+                    y en la ficha que lee Google. Se cambian una sola vez acá.
+                </p>
+
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.Telefono" class="form-label">Teléfono / WhatsApp</label>
+                        <input asp-for="Input.Telefono" class="form-control" placeholder="096 045 127" />
+                        <span asp-validation-for="Input.Telefono" class="text-danger"></span>
+                        <div class="form-text">
+                            Escribilo como en Uruguay, con el 0 adelante. El prefijo del país se
+                            agrega solo.
+                            <br />
+                            Ahora mismo se muestra como <strong>@Model.VistaPreviaVisible</strong>
+                            y los botones abren
+                            <a href="@Model.VistaPreviaWhatsApp" target="_blank">@Model.VistaPreviaWhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.Direccion" class="form-label">Dirección</label>
+                        <input asp-for="Input.Direccion" class="form-control" placeholder="Coronel Lucas Píriz 2548" />
+                        <span asp-validation-for="Input.Direccion" class="text-danger"></span>
+                        <div class="form-text">
+                            Calle y número. Si la dejás vacía, el sitio muestra
+                            "dirección por WhatsApp" y no la publica en los datos de Google.
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Guardar cambios</button>
+                        <a asp-page="/Index" class="btn btn-outline-secondary">Volver al sitio</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

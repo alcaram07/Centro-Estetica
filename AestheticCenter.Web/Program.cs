@@ -36,6 +36,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddScoped<AestheticCenter.Infrastructure.Repositories.ServiceRepository>();
 builder.Services.AddScoped<AestheticCenter.Infrastructure.Repositories.AppointmentRepository>();
 
+// Singleton: cachea la configuración del sitio, que el layout lee en todas las
+// páginas. Toma sus propios scopes para acceder al DbContext.
+builder.Services.AddSingleton<AestheticCenter.Web.SiteSettingsProvider>();
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();

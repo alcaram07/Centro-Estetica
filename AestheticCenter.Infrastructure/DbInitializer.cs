@@ -13,6 +13,8 @@ public static class DbInitializer
         // EnsureCreated es más robusto cuando mezclamos SQLite y Postgres al inicio
         await context.Database.EnsureCreatedAsync();
 
+        await InicializarConfiguracionAsync(context);
+
         // 1. Crear Roles si no existen
         string[] roleNames = { "Admin", "Customer" };
         foreach (var roleName in roleNames)
@@ -53,6 +55,44 @@ public static class DbInitializer
         };
 
         context.Services.AddRange(services);
+        await context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Crea la tabla de configuración y siembra la única fila.
+    ///
+    /// EnsureCreated crea la base entera cuando no existe, pero no toca una que
+    /// ya tiene datos: sin este CREATE, la tabla nunca aparecería en producción
+    /// y el sitio fallaría al leerla. La sintaxis funciona igual en SQLite y en
+    /// PostgreSQL, que es lo que usa cada entorno.
+    ///
+    /// Va antes de la semilla de servicios a propósito: aquella corta con un
+    /// return temprano si ya hay servicios cargados.
+    /// </summary>
+    private static async Task InicializarConfiguracionAsync(ApplicationDbContext context)
+    {
+        await context.Database.ExecuteSqlRawAsync(
+            """
+            CREATE TABLE IF NOT EXISTS "SiteSettings" (
+                "Id" INTEGER NOT NULL PRIMARY KEY,
+                "Phone" TEXT NOT NULL,
+                "Address" TEXT NOT NULL
+            )
+            """);
+
+        if (await context.SiteSettings.AnyAsync())
+        {
+            return;
+        }
+
+        // Los valores con los que arranca son los que el sitio tenía escritos en
+        // el código, para que publicar este cambio no altere nada visible.
+        context.SiteSettings.Add(new SiteSettings
+        {
+            Id = 1,
+            Phone = "096 045 127",
+            Address = "Coronel Lucas Píriz 2548",
+        });
         await context.SaveChangesAsync();
     }
 }
