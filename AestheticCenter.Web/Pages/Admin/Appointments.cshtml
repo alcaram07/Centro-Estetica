@@ -5,51 +5,58 @@
 }
 
 <div class="mb-4">
-    <h1>Panel de Administración: Citas</h1>
-    <p class="text-muted">Gestiona las reservas de tus clientes.</p>
+    <h1 class="admin-title">Citas</h1>
+    <p class="admin-sub">Gestioná las reservas de tus clientas.</p>
 </div>
 
 <div class="card shadow-sm border-0">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
+                @* El estado se oculta en pantallas chicas: el mismo badge se
+                   repite dentro de la primera celda. *@
                 <tr>
                     <th>Cliente</th>
-                    <th>Servicio</th>
-                    <th>Fecha y Hora</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                    <th class="d-none d-lg-table-cell">Servicio</th>
+                    <th>Fecha y hora</th>
+                    <th class="d-none d-md-table-cell">Estado</th>
+                    <th class="text-end">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var appointment in Model.Appointments)
                 {
+                    @* El estilo del badge se resuelve una vez porque se muestra
+                       en dos lugares: en su columna y, en pantallas chicas donde
+                       esa columna no está, dentro de la celda del cliente. *@
+                    var (badgeClase, badgeTexto) = appointment.Status switch
+                    {
+                        AestheticCenter.Core.Entities.AppointmentStatus.Pending => ("bg-warning text-dark", "Pendiente"),
+                        AestheticCenter.Core.Entities.AppointmentStatus.Confirmed => ("bg-success", "Confirmada"),
+                        AestheticCenter.Core.Entities.AppointmentStatus.Cancelled => ("bg-danger", "Cancelada"),
+                        AestheticCenter.Core.Entities.AppointmentStatus.Completed => ("bg-info text-dark", "Completada"),
+                        _ => ("bg-secondary", appointment.Status.ToString()),
+                    };
+
                     <tr>
                         <td>
                             <div class="fw-bold">@appointment.CustomerId</div>
-                            <small class="text-muted">@appointment.Notes</small>
-                        </td>
-                        <td>@appointment.Service?.Name</td>
-                        <td>@appointment.AppointmentTime.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>
-                            @switch (appointment.Status)
+                            @if (!string.IsNullOrWhiteSpace(appointment.Notes))
                             {
-                                case AestheticCenter.Core.Entities.AppointmentStatus.Pending:
-                                    <span class="badge bg-warning text-dark">Pendiente</span>
-                                    break;
-                                case AestheticCenter.Core.Entities.AppointmentStatus.Confirmed:
-                                    <span class="badge bg-success">Confirmada</span>
-                                    break;
-                                case AestheticCenter.Core.Entities.AppointmentStatus.Cancelled:
-                                    <span class="badge bg-danger">Cancelada</span>
-                                    break;
-                                case AestheticCenter.Core.Entities.AppointmentStatus.Completed:
-                                    <span class="badge bg-info text-dark">Completada</span>
-                                    break;
+                                <small class="text-muted d-block">@appointment.Notes</small>
                             }
+                            <small class="text-muted d-lg-none d-block">@appointment.Service?.Name</small>
+                            <span class="badge @badgeClase d-md-none mt-1">@badgeTexto</span>
                         </td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
+                        <td class="d-none d-lg-table-cell">@appointment.Service?.Name</td>
+                        <td>@appointment.AppointmentTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="d-none d-md-table-cell">
+                            <span class="badge @badgeClase">@badgeTexto</span>
+                        </td>
+                        <td class="text-end admin-acciones">
+                            @* d-flex y no btn-group: los hijos son formularios,
+                               no botones, y el agrupado salía partido. *@
+                            <div class="d-flex gap-1 justify-content-end btn-group-sm">
                                 <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@appointment.Id" asp-route-status="Confirmed">
                                     <button type="submit" class="btn btn-outline-success" title="Confirmar">
                                         <i class="bi bi-check-lg"></i>
@@ -73,7 +80,3 @@
         </table>
     </div>
 </div>
-
-@section Scripts {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-}

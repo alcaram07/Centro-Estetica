@@ -30,6 +30,8 @@ body {
 .bg-nude {
   background: rgba(253, 246, 240, 0.96);
   backdrop-filter: blur(8px);
+  /* El gris por defecto de Bootstrap corta demasiado sobre el nude. */
+  border-bottom-color: var(--border) !important;
 }
 
 .logo-circle {
@@ -51,13 +53,56 @@ body {
 }
 .navbar-nav .nav-link:hover { color: var(--rosa) !important; }
 
+/* El rosa claro sobre blanco daba 4,4:1 y no llegaba al 4,5:1 que pide WCAG AA
+   para texto normal. El oscuro se ve como el mismo rosa un punto más intenso. */
 .nav-cta {
-  background: var(--rosa); color: #fff;
+  background: var(--rosa-dark); color: #fff;
   border: none; border-radius: 22px;
   padding: 10px 24px; font-size: 14px;
+  white-space: nowrap;
   cursor: pointer; transition: background .2s;
 }
-.nav-cta:hover { background: var(--rosa-dark); color: #fff; }
+.nav-cta:hover { background: var(--ciruela); color: #fff; }
+
+/* ── PANEL ───────────────────────────────── */
+.nav-panel { color: var(--rosa) !important; font-weight: 500; }
+.nav-panel.activo { color: var(--rosa-dark) !important; }
+
+.nav-panel-menu {
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgba(92, 45, 78, 0.10);
+  padding: 6px;
+  font-size: 14px;
+}
+.nav-panel-menu .dropdown-item {
+  border-radius: 9px;
+  padding: 8px 12px;
+  color: var(--text-mid);
+}
+.nav-panel-menu .dropdown-item:hover,
+.nav-panel-menu .dropdown-item:focus {
+  background: var(--rosa-light);
+  color: var(--rosa-dark);
+}
+.nav-panel-menu .dropdown-item i { margin-right: 6px; opacity: .7; }
+
+.admin-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 400;
+  color: var(--ciruela);
+  margin-bottom: 2px;
+}
+.admin-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 0; }
+
+.admin-card-header {
+  background: var(--ciruela);
+  color: #fff;
+}
+
+/* La columna de acciones no se parte en varias líneas. */
+.admin-acciones { white-space: nowrap; }
 
 /* ── HELPERS ─────────────────────────────── */
 .section-label {
@@ -102,6 +147,16 @@ body {
   background-color: var(--rosa-light);
   border-color: var(--rosa);
   color: var(--rosa);
+}
+
+/* El padding y el radio de arriba son para los CTA grandes del sitio, pero
+   pisaban también a los botones chicos de las tablas del panel: los de editar y
+   eliminar salían enormes y redondos. Va después para ganar por orden. */
+.btn-sm,
+.btn-group-sm > .btn {
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-size: 13px;
 }
 
 /* ── FOOTER ──────────────────────────────── */

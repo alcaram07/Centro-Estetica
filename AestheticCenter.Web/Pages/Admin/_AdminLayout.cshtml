@@ -1,0 +1,16 @@
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+@* Las páginas del panel no traían contenedor: el contenido quedaba pegado a los
+   bordes de la pantalla y los "row" de los formularios, con sus márgenes
+   negativos, provocaban desplazamiento horizontal. Se resuelve una sola vez acá
+   en lugar de repetirlo en cada vista. *@
+<div class="container py-4 py-md-5">
+    @RenderBody()
+</div>
+
+@* Los layouts anidados no propagan las secciones solos. *@
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}
