@@ -6,7 +6,16 @@
     // wwwroot/robots.txt y wwwroot/sitemap.xml, que lo llevan escrito.
     var siteUrl = SiteInfo.Url;
 
-    var canonicalUrl = siteUrl + Context.Request.Path.Value?.TrimEnd('/');
+    // Razor Pages sirve la misma página en /Services y en /Services/Index, y las
+    // dos respondían declarándose canónicas a sí mismas: para Google eran dos
+    // páginas con el mismo contenido. Se normaliza a la forma corta, que es la
+    // que usan todos los enlaces del sitio.
+    var path = Context.Request.Path.Value?.TrimEnd('/') ?? string.Empty;
+    if (path.EndsWith("/Index", StringComparison.OrdinalIgnoreCase))
+    {
+        path = path[..^"/Index".Length];
+    }
+    var canonicalUrl = siteUrl + path;
     if (canonicalUrl == siteUrl) { canonicalUrl = siteUrl + "/"; }
 
     var metaDescription = ViewData["Description"] as string
