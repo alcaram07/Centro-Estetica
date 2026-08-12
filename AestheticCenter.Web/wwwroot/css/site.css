@@ -24,7 +24,19 @@ body {
   background: var(--nude);
   color: var(--text-dark);
   line-height: 1.6;
+  /* El pie va siempre abajo. El layout ya traía un .main-wrapper, pero nunca
+     se le dio estilo: en las páginas de contenido corto, como Citas cuando no
+     hay ninguna cargada, el pie quedaba en la mitad de la pantalla. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+body > header,
+body > footer { flex-shrink: 0; }
+
+/* Ocupa el alto sobrante y empuja el pie hasta el fondo. */
+.main-wrapper { flex: 1 0 auto; }
 
 /* ── NAVEGACIÓN ──────────────────────────── */
 .bg-nude {
