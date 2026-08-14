@@ -82,6 +82,28 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// El subdominio de Render sigue respondiendo además del dominio propio, así que
+// sin esto quedarían dos direcciones sirviendo lo mismo y Google tendría que
+// adivinar cuál indexar. El 301 es permanente a propósito: le traspasa al
+// dominio nuevo lo que el viejo ya tenía ganado, en lugar de perderlo.
+app.Use(async (context, siguiente) =>
+{
+    var host = context.Request.Host.Host;
+
+    // /health queda afuera: lo consulta Render para saber si el servicio está
+    // vivo, y una redirección se la haría fallar.
+    if (host.EndsWith("onrender.com", StringComparison.OrdinalIgnoreCase)
+        && !context.Request.Path.StartsWithSegments("/health"))
+    {
+        context.Response.Redirect(
+            AestheticCenter.Web.SiteInfo.Url + context.Request.Path + context.Request.QueryString,
+            permanent: true);
+        return;
+    }
+
+    await siguiente();
+});
+
 app.UseHttpsRedirection();
 
 app.UseRouting();

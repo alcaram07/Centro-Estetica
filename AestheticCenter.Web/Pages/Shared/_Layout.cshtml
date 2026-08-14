@@ -2,8 +2,8 @@
 @inject AestheticCenter.Web.SiteSettingsProvider Sitio
 @inject AestheticCenter.Web.CatalogoServicios Catalogo
 @{
-    // Dominio público del sitio. Si se migra a un dominio propio, actualizar también
-    // wwwroot/robots.txt y wwwroot/sitemap.xml, que lo llevan escrito.
+    // Dominio público del sitio, definido en SiteInfo. El sitemap se genera y lo
+    // toma de ahí; el único otro lugar donde está escrito es robots.txt.
     var siteUrl = SiteInfo.Url;
 
     // Razor Pages sirve la misma página en /Services y en /Services/Index, y las

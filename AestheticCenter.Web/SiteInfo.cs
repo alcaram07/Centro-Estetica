@@ -13,7 +13,12 @@ namespace AestheticCenter.Web;
 /// </summary>
 public static class SiteInfo
 {
-    public static readonly string Url = "https://centro-estetica.onrender.com";
+    /// <summary>
+    /// De acá salen el canonical de todas las páginas, el sitemap, el JSON-LD y
+    /// las etiquetas para redes. Si vuelve a cambiar, actualizar también la
+    /// línea Sitemap de wwwroot/robots.txt, que lo lleva escrito.
+    /// </summary>
+    public static readonly string Url = "https://paticestetica.com";
 
     /// <summary>
     /// La reserva de turnos online. Apagada: el sitio funciona como landing y
