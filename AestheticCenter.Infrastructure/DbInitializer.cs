@@ -43,18 +43,7 @@ public static class DbInitializer
             await userManager.AddToRoleAsync(adminUser, "Admin");
         }
 
-        // 3. Promover a Patricia a Admin. Se registró ella misma desde
-        // /Identity/Account/Register (así su contraseña no pasa por acá ni por
-        // git); esto solo la suma al rol. Paso temporal: se saca del código
-        // una vez confirmado que quedó con acceso al panel.
-        var patriciaEmail = "patocaram@hotmail.es";
-        var patriciaUser = await userManager.FindByEmailAsync(patriciaEmail);
-        if (patriciaUser != null && !await userManager.IsInRoleAsync(patriciaUser, "Admin"))
-        {
-            await userManager.AddToRoleAsync(patriciaUser, "Admin");
-        }
-
-        // 4. Semilla de Servicios
+        // 3. Semilla de Servicios
         if (context.Services.Any())
         {
             return;
