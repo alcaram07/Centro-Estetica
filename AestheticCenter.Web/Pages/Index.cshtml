@@ -15,6 +15,21 @@
     ViewData["Description"] = servicios.Length > 0 && conServicios.Length <= 160
         ? conServicios
         : $"Centro de estética y cosmetología en {SiteInfo.Barrio}, {SiteInfo.Ciudad}. Tratamientos faciales, masajes y cuidado de la piel. Reservá por WhatsApp.";
+
+    // Preguntas frecuentes: mismo contenido para lo que ve la persona y para el
+    // JSON-LD de más abajo. Google exige que las dos coincidan; tenerlas en un
+    // solo lugar evita que se desincronicen.
+    var preguntas = new (string Pregunta, string Respuesta)[]
+    {
+        ("¿Cada cuánto conviene hacerse una limpieza facial?",
+         "En general se recomienda cada 4 a 6 semanas, según el tipo de piel. En la consulta por WhatsApp te puedo orientar según tu caso."),
+        ("¿Los masajes estéticos duelen?",
+         "No deberían doler. La intensidad se ajusta a lo que cada clienta tolera y busca, desde relajación hasta trabajo más profundo."),
+        ("¿Necesito pedir turno o atienden sin cita previa?",
+         $"Se atiende con cita previa en {SiteInfo.Barrio}, {SiteInfo.Ciudad}. Coordinamos día y horario por WhatsApp."),
+        ("Nunca me hice un tratamiento estético, ¿por dónde empiezo?",
+         "Contame por WhatsApp qué te gustaría mejorar y te recomiendo el tratamiento más adecuado para tu piel y objetivo."),
+    };
 }
 
 <style>
@@ -153,6 +168,16 @@
       border-radius: 30px;
       padding: 80px 48px;
     }
+
+    .faq-item {
+      background: var(--white); border: 0.5px solid var(--border);
+      border-radius: 16px; padding: 24px 28px; margin-bottom: 16px;
+    }
+    .faq-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px; color: var(--ciruela); margin-bottom: 10px;
+    }
+    .faq-item p { color: var(--text-mid); margin-bottom: 0; line-height: 1.7; }
 </style>
 
 <!-- HERO -->
@@ -229,7 +254,7 @@
         <div class="row align-items-center g-5">
             <div class="col-lg-5">
                 <div class="about-photo shadow">
-                    <img src="~/images/patricia.jpg" alt="Patricia" class="img-fluid rounded-24" style="object-fit: cover; width: 100%; height: 100%;" asp-append-version="true" />
+                    <img src="~/images/patricia.jpg" alt="Patricia" class="img-fluid rounded-24" style="object-fit: cover; width: 100%; height: 100%;" width="1023" height="1537" loading="lazy" asp-append-version="true" />
                 </div>
             </div>
             <div class="col-lg-7">
@@ -341,6 +366,40 @@
         </div>
     </div>
 </div>
+
+<!-- PREGUNTAS FRECUENTES -->
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <span class="section-label">Dudas frecuentes</span>
+        <h2 class="section-title">Preguntas frecuentes</h2>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            @foreach (var (pregunta, respuesta) in preguntas)
+            {
+                <div class="faq-item">
+                    <h3>@pregunta</h3>
+                    <p>@respuesta</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@* FAQPage: el contenido tiene que coincidir con lo que se ve arriba, es
+   requisito de Google para mostrar estas preguntas como resultado
+   enriquecido. *@
+<!script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@@type": "FAQPage",
+  "mainEntity": [
+    @Html.Raw(string.Join(",\n    ", preguntas.Select(p =>
+        "{ \"@type\": \"Question\", \"name\": \"" + JsonLd.Texto(p.Pregunta) +
+        "\", \"acceptedAnswer\": { \"@type\": \"Answer\", \"text\": \"" + JsonLd.Texto(p.Respuesta) + "\" } }")))
+  ]
+}
+</!script>
 
 <!-- CTA FINAL -->
 <div class="container py-5">
