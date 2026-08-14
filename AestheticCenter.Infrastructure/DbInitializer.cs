@@ -16,6 +16,7 @@ public static class DbInitializer
         await InicializarConfiguracionAsync(context);
         await AgregarColumnaTextoLargoAsync(context);
         await AgregarColumnaFechaAsync(context);
+        await InicializarResenasAsync(context);
 
         // 1. Crear Roles si no existen
         string[] roleNames = { "Admin", "Customer" };
@@ -137,6 +138,41 @@ public static class DbInitializer
         var sql = context.Database.IsNpgsql()
             ? """ALTER TABLE "Services" ADD COLUMN "UpdatedAt" timestamp with time zone NULL"""
             : """ALTER TABLE "Services" ADD COLUMN "UpdatedAt" TEXT NULL""";
+
+        await context.Database.ExecuteSqlRawAsync(sql);
+    }
+
+    /// <summary>
+    /// Crea la tabla de reseñas. Mismo motivo que la de configuración: es una
+    /// tabla nueva y EnsureCreated no la agrega a una base que ya existía.
+    ///
+    /// El tipo de "CreatedAt" y "Approved" sí depende del motor, como en
+    /// Services.UpdatedAt: SQLite los guarda como texto y entero, Postgres
+    /// tiene tipos nativos para fecha con huso horario y booleano.
+    /// </summary>
+    private static async Task InicializarResenasAsync(ApplicationDbContext context)
+    {
+        var sql = context.Database.IsNpgsql()
+            ? """
+              CREATE TABLE IF NOT EXISTS "Testimonials" (
+                  "Id" SERIAL NOT NULL PRIMARY KEY,
+                  "ClientName" TEXT NOT NULL,
+                  "Text" TEXT NOT NULL,
+                  "Rating" INTEGER NOT NULL,
+                  "CreatedAt" timestamp with time zone NOT NULL,
+                  "Approved" BOOLEAN NOT NULL DEFAULT FALSE
+              )
+              """
+            : """
+              CREATE TABLE IF NOT EXISTS "Testimonials" (
+                  "Id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                  "ClientName" TEXT NOT NULL,
+                  "Text" TEXT NOT NULL,
+                  "Rating" INTEGER NOT NULL,
+                  "CreatedAt" TEXT NOT NULL,
+                  "Approved" INTEGER NOT NULL DEFAULT 0
+              )
+              """;
 
         await context.Database.ExecuteSqlRawAsync(sql);
     }

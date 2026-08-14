@@ -1,0 +1,89 @@
+@page
+@model AestheticCenter.Web.Pages.Admin.Resenas.IndexModel
+@{
+    ViewData["Title"] = "Gestión de Reseñas";
+}
+
+<div class="mb-4">
+    <h1 class="admin-title">Reseñas</h1>
+    <p class="admin-sub">Aprobá las que quieras mostrar en la home. Las clientas las dejan desde /Resenas.</p>
+</div>
+
+@if (!Model.Testimonials.Any())
+{
+    <div class="card shadow-sm border-0">
+        <div class="card-body text-center text-muted py-5">
+            <i class="bi bi-chat-square-heart fs-1 d-block mb-3 opacity-50"></i>
+            Todavía no llegó ninguna reseña.
+        </div>
+    </div>
+}
+else
+{
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Clienta</th>
+                        <th>Reseña</th>
+                        <th class="d-none d-md-table-cell">Calificación</th>
+                        <th class="d-none d-md-table-cell">Estado</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var resena in Model.Testimonials)
+                    {
+                        <tr>
+                            <td>
+                                <div class="fw-bold">@resena.ClientName</div>
+                                <small class="text-muted">@resena.CreatedAt.ToString("dd/MM/yyyy")</small>
+                            </td>
+                            <td class="small">@resena.Text</td>
+                            <td class="d-none d-md-table-cell">
+                                @string.Concat(Enumerable.Repeat("★", resena.Rating))@string.Concat(Enumerable.Repeat("☆", 5 - resena.Rating))
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                @if (resena.Approved)
+                                {
+                                    <span class="badge bg-success">Publicada</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                }
+                            </td>
+                            <td class="text-end admin-acciones">
+                                <div class="d-flex gap-1 justify-content-end btn-group-sm">
+                                    @if (resena.Approved)
+                                    {
+                                        <form method="post" asp-page-handler="Ocultar" asp-route-id="@resena.Id">
+                                            <button type="submit" class="btn btn-outline-secondary" title="Ocultar de la home">
+                                                <i class="bi bi-eye-slash"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" asp-page-handler="Aprobar" asp-route-id="@resena.Id">
+                                            <button type="submit" class="btn btn-outline-success" title="Publicar en la home">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    <form method="post" asp-page-handler="Eliminar" asp-route-id="@resena.Id"
+                                          onsubmit="return confirm('¿Eliminar esta reseña?');">
+                                        <button type="submit" class="btn btn-outline-danger" title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

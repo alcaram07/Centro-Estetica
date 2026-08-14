@@ -1,0 +1,74 @@
+@page
+@model AestheticCenter.Web.Pages.Resenas.IndexModel
+@{
+    ViewData["Title"] = "Dejá tu reseña";
+    ViewData["Description"] = "Contanos cómo fue tu experiencia en Pati C Estética & Cosmetología. Tu reseña se publica en la web una vez que Patricia la revisa.";
+    // Página de formulario, sin contenido propio que le interese a Google.
+    ViewData["Robots"] = "noindex, follow";
+}
+
+<style>
+    .resena-wrap { max-width: 560px; margin: 0 auto; }
+    .resena-honeypot { position: absolute; left: -9999px; opacity: 0; }
+</style>
+
+<div class="container py-5">
+    <div class="resena-wrap">
+        <div class="text-center mb-4">
+            <span class="section-label">Tu experiencia</span>
+            <h1 class="section-title">Dejá tu reseña</h1>
+            <p class="section-sub">Contanos cómo te fue. Se publica en la web una vez que Patricia la revisa.</p>
+        </div>
+
+        @if (Model.Enviada)
+        {
+            <div class="alert alert-success text-center" role="alert">
+                <i class="bi bi-check-circle-fill fs-3 d-block mb-2"></i>
+                ¡Gracias por tu reseña! Se va a publicar apenas Patricia la revise.
+            </div>
+        }
+        else
+        {
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                @* Nadie ve este campo: si llega completo, es un bot. *@
+                <div class="resena-honeypot" aria-hidden="true">
+                    <label asp-for="Web">Sitio web</label>
+                    <input asp-for="Web" tabindex="-1" autocomplete="off" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Resena.ClientName" class="form-label">Tu nombre</label>
+                    <input asp-for="Resena.ClientName" class="form-control" placeholder="Ej: Valentina R." />
+                    <span asp-validation-for="Resena.ClientName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Resena.Rating" class="form-label">Calificación</label>
+                    <select asp-for="Resena.Rating" class="form-select">
+                        <option value="5">★★★★★ Excelente</option>
+                        <option value="4">★★★★ Muy buena</option>
+                        <option value="3">★★★ Buena</option>
+                        <option value="2">★★ Regular</option>
+                        <option value="1">★ Mala</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Resena.Text" class="form-label">Tu experiencia</label>
+                    <textarea asp-for="Resena.Text" class="form-control" rows="5" placeholder="Contanos qué tratamiento te hiciste y cómo te sentiste..."></textarea>
+                    <span asp-validation-for="Resena.Text" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Enviar reseña</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

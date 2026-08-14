@@ -280,27 +280,51 @@
             <h2 class="section-title">Testimonios de clientas</h2>
         </div>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="testi-card shadow-sm">
-                    <div class="testi-stars">★★★★★</div>
-                    <p class="fst-italic text-muted">"La limpieza facial me dejó la piel increíble. Patricia es una profesional de verdad."</p>
-                    <div class="fw-bold mt-3">— Valentina R.</div>
+            @if (Model.Testimonios.Count > 0)
+            {
+                @* Reseñas reales, aprobadas desde el panel. Mientras no haya
+                   ninguna, se muestran las de ejemplo de más abajo para no
+                   dejar la sección vacía. *@
+                foreach (var testimonio in Model.Testimonios)
+                {
+                    <div class="col-md-4">
+                        <div class="testi-card shadow-sm">
+                            <div class="testi-stars">@string.Concat(Enumerable.Repeat("★", testimonio.Rating))@string.Concat(Enumerable.Repeat("☆", 5 - testimonio.Rating))</div>
+                            <p class="fst-italic text-muted">"@testimonio.Text"</p>
+                            <div class="fw-bold mt-3">— @testimonio.ClientName</div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-4">
+                    <div class="testi-card shadow-sm">
+                        <div class="testi-stars">★★★★★</div>
+                        <p class="fst-italic text-muted">"La limpieza facial me dejó la piel increíble. Patricia es una profesional de verdad."</p>
+                        <div class="fw-bold mt-3">— Valentina R.</div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="testi-card shadow-sm">
-                    <div class="testi-stars">★★★★★</div>
-                    <p class="fst-italic text-muted">"El masaje fue lo mejor que pude haberme regalado. Me sentí otra persona. ¡Vuelvo seguro!"</p>
-                    <div class="fw-bold mt-3">— Sofía M.</div>
+                <div class="col-md-4">
+                    <div class="testi-card shadow-sm">
+                        <div class="testi-stars">★★★★★</div>
+                        <p class="fst-italic text-muted">"El masaje fue lo mejor que pude haberme regalado. Me sentí otra persona. ¡Vuelvo seguro!"</p>
+                        <div class="fw-bold mt-3">— Sofía M.</div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="testi-card shadow-sm">
-                    <div class="testi-stars">★★★★★</div>
-                    <p class="fst-italic text-muted">"Atención súper personalizada. Se nota que le importa cada clienta y eso no tiene precio."</p>
-                    <div class="fw-bold mt-3">— Carolina T.</div>
+                <div class="col-md-4">
+                    <div class="testi-card shadow-sm">
+                        <div class="testi-stars">★★★★★</div>
+                        <p class="fst-italic text-muted">"Atención súper personalizada. Se nota que le importa cada clienta y eso no tiene precio."</p>
+                        <div class="fw-bold mt-3">— Carolina T.</div>
+                    </div>
                 </div>
-            </div>
+            }
+        </div>
+        <div class="text-center mt-5">
+            <a asp-page="/Resenas/Index" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="bi bi-pencil-square"></i> ¿Ya fuiste clienta? Dejá tu reseña
+            </a>
         </div>
     </div>
 </section>
