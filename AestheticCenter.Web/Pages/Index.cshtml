@@ -3,16 +3,18 @@
 @inject AestheticCenter.Web.SiteSettingsProvider Sitio
 @inject AestheticCenter.Web.CatalogoServicios Catalogo
 @{
-    ViewData["Title"] = "Estética y Cosmetología en Montevideo";
+    // "Centro de estética" adelante: es el término por el que busca quien todavía
+    // no conoce el negocio, y el sitio no lo usaba en ninguna parte.
+    ViewData["Title"] = "Centro de Estética y Cosmetología en Montevideo";
 
     // La descripción nombra los servicios reales, que es por lo que se busca.
     // Si son muchos y el texto se pasa del largo que Google muestra (~160
     // caracteres), se cae al genérico en lugar de publicar una frase cortada.
     var servicios = Catalogo.EnTexto();
-    var conServicios = $"Esteticista y cosmetóloga en {SiteInfo.Ciudad}: {servicios}. Reservá por WhatsApp.";
+    var conServicios = $"Centro de estética en {SiteInfo.Barrio}, {SiteInfo.Ciudad}: {servicios}. Reservá por WhatsApp.";
     ViewData["Description"] = servicios.Length > 0 && conServicios.Length <= 160
         ? conServicios
-        : "Esteticista y cosmetóloga en Montevideo. Tratamientos faciales, masajes estéticos y cuidado de la piel personalizado. Reservá tu turno por WhatsApp.";
+        : $"Centro de estética y cosmetología en {SiteInfo.Barrio}, {SiteInfo.Ciudad}. Tratamientos faciales, masajes y cuidado de la piel. Reservá por WhatsApp.";
 }
 
 <style>
@@ -156,9 +158,11 @@
 <!-- HERO -->
 <section class="hero">
     <span class="hero-badge">Patricia · Esteticista & Cosmetóloga · @SiteInfo.Barrio</span>
-    <h1>Estética y <em>Cosmetología</em><br>en @SiteInfo.Ciudad</h1>
+    @* El h1 nombra el rubro como lo busca la gente ("centro de estética"), no
+       solo como se describe el negocio a sí mismo. *@
+    <h1>Centro de <em>Estética</em><br>en @SiteInfo.Ciudad</h1>
     <p class="hero-lead">Tu piel merece lo mejor.</p>
-    <p>Tratamientos faciales, masajes y cosmetología personalizada en @SiteInfo.Barrio. Porque cada piel tiene su historia.</p>
+    <p>Centro de estética y cosmetología en @SiteInfo.Barrio: tratamientos faciales, masajes y cuidado personalizado. Porque cada piel tiene su historia.</p>
     <div class="d-flex justify-content-center gap-3 flex-wrap">
         <a asp-page="/Services/Index" class="btn btn-primary btn-lg">Ver servicios</a>
         @* El texto acompaña al mensaje que se abre: si el chat arranca pidiendo
@@ -282,7 +286,7 @@
         <div class="row align-items-center g-5">
             <div class="col-lg-7">
                 <span class="section-label">Dónde estoy</span>
-                <h2 class="section-title mb-4">Estética y cosmetología en @SiteInfo.Barrio, @SiteInfo.Ciudad</h2>
+                <h2 class="section-title mb-4">Centro de estética en @SiteInfo.Barrio, @SiteInfo.Ciudad</h2>
                 <p class="text-muted mb-4">
                     Atiendo con cita previa en @SiteInfo.Barrio, @SiteInfo.Ciudad. Si buscás una
                     esteticista y cosmetóloga cerca tuyo, escribime por WhatsApp y coordinamos
